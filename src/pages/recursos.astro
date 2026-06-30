@@ -1,14 +1,72 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import { resolveSeo, buildCanonical } from '@/config';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Card from '@/components/ui/Card.astro';
+import { SITE, SOCIAL, resolveSeo, buildCanonical } from '@/config';
 
 const seo = resolveSeo({
   title: 'Recursos',
-  description: 'Materiales, guías y herramientas para tu crecimiento personal y profesional.',
+  description:
+    'Tutoriales, guías y herramientas para mujeres que crean. Tejido, macramé, crochet y crecimiento personal.',
   canonical: buildCanonical('/recursos'),
 });
+
+const instagramUrl = SOCIAL.instagram;
+const youtubeUrl = SOCIAL.youtube;
 ---
 
 <PageLayout seo={seo}>
-  <h1>Recursos</h1>
+
+  <!-- INTRO -->
+  <Section id="recursos-intro" spacing="xl" labelledBy="recursos-heading">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
+        {SITE.name}
+      </p>
+      <h1
+        id="recursos-heading"
+        class="font-display text-4xl sm:text-5xl text-text leading-tight mb-6"
+      >
+        Recursos
+      </h1>
+      <p class="text-lg text-text-muted leading-relaxed">
+        Un espacio en construcción con tutoriales, guías y materiales para mujeres
+        que crean. Tejido, macramé, crochet y todo lo que necesitás para seguir
+        creciendo a tu ritmo.
+      </p>
+    </div>
+  </Section>
+
+  <!-- PLACEHOLDER — próximo contenido -->
+  <Section id="recursos-contenido" spacing="xl" background="alt" labelledBy="recursos-pronto-heading">
+    <!-- Reemplazar por posts.map((post) => <Card href={...}>...</Card>) cuando existan entradas en src/content/blog/ -->
+    <Card>
+      <div class="flex flex-col gap-4">
+        <Badge variant="primary">Próximamente</Badge>
+        <h2 id="recursos-pronto-heading" class="font-display font-bold text-2xl text-text">
+          Estamos preparando el contenido
+        </h2>
+        <p class="text-text-muted leading-relaxed">
+          Estamos preparando tutoriales, artículos y recursos para vos.
+          Mientras tanto, seguinos en redes para no perderte nada:
+          cada semana compartimos tips, ideas y el proceso detrás de cada proyecto.
+        </p>
+        <div class="flex flex-wrap gap-3 pt-2">
+          {instagramUrl ? (
+            <Button href={instagramUrl} target="_blank" size="md">
+              Seguinos en Instagram
+            </Button>
+          ) : null}
+          {youtubeUrl ? (
+            <Button href={youtubeUrl} target="_blank" variant="outline" size="md">
+              Canal de YouTube
+            </Button>
+          ) : null}
+        </div>
+      </div>
+    </Card>
+  </Section>
+
 </PageLayout>

@@ -1,14 +1,134 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import { resolveSeo, buildCanonical } from '@/config';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Card from '@/components/ui/Card.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { SITE, SOCIAL, resolveSeo, buildCanonical } from '@/config';
 
 const seo = resolveSeo({
   title: 'Comunidad',
-  description: 'Conectate con otras mujeres que crean, tejen y se inspiran.',
+  description:
+    'Conectate con otras mujeres que crean, tejen y se inspiran. Una comunidad de tejido, macramé y crochet en General Roca, Río Negro.',
   canonical: buildCanonical('/comunidad'),
 });
+
+type SocialLink = { icon: string; label: string; handle: string; url: string };
+
+const socialLinks: SocialLink[] = ([
+  { icon: 'instagram', label: 'Instagram', handle: '@inspiramujer', url: SOCIAL.instagram },
+  { icon: 'youtube',   label: 'YouTube',   handle: '@inspiramujer', url: SOCIAL.youtube   },
+  { icon: 'external-link', label: 'Facebook', handle: '/inspiramujer', url: SOCIAL.facebook },
+  { icon: 'external-link', label: 'TikTok',   handle: '@inspiramujer', url: SOCIAL.tiktok   },
+] as { icon: string; label: string; handle: string; url: string | undefined }[]).filter(
+  (s): s is SocialLink => s.url !== undefined
+);
 ---
 
 <PageLayout seo={seo}>
-  <h1>Comunidad</h1>
+
+  <!-- INTRO -->
+  <Section id="comunidad-intro" spacing="xl" labelledBy="comunidad-heading">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
+        {SITE.name}
+      </p>
+      <h1
+        id="comunidad-heading"
+        class="font-display text-4xl sm:text-5xl text-text leading-tight mb-6"
+      >
+        Comunidad
+      </h1>
+      <p class="text-lg text-text-muted leading-relaxed">
+        Un espacio para mujeres que encuentran en el tejido, el macramé y el crochet
+        mucho más que una técnica: una forma de conectar, crear y crecer juntas.
+        Cada puntada es una conversación. Cada proyecto, una historia compartida.
+      </p>
+    </div>
+  </Section>
+
+  <!-- PILARES -->
+  <Section id="pilares" spacing="xl" background="alt" labelledBy="pilares-heading">
+    <h2 id="pilares-heading" class="font-display text-3xl sm:text-4xl text-text mb-2">
+      Los pilares de la comunidad
+    </h2>
+    <p class="text-text-muted mb-10 max-w-prose">
+      Tres ideas que guían todo lo que hacemos en Inspira Mujer.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <Card>
+        <div class="w-10 h-10 rounded-full bg-primary/20 mb-4" aria-hidden="true"></div>
+        <h3 class="font-display font-bold text-lg text-text mb-2">Crear</h3>
+        <p class="text-text-muted text-sm leading-relaxed">
+          El tejido, el macramé y el crochet como formas de expresión y meditación.
+          Cada proyecto terminado es una victoria que celebramos juntas.
+        </p>
+      </Card>
+      <Card>
+        <div class="w-10 h-10 rounded-full bg-secondary/30 mb-4" aria-hidden="true"></div>
+        <h3 class="font-display font-bold text-lg text-text mb-2">Compartir</h3>
+        <p class="text-text-muted text-sm leading-relaxed">
+          Las dudas se responden, los logros se celebran y los procesos se muestran
+          sin filtros. Aprendemos mejor cuando nos acompañamos.
+        </p>
+      </Card>
+      <Card>
+        <div class="w-10 h-10 rounded-full bg-accent/20 mb-4" aria-hidden="true"></div>
+        <h3 class="font-display font-bold text-lg text-text mb-2">Inspirar</h3>
+        <p class="text-text-muted text-sm leading-relaxed">
+          Conversaciones y recursos semanales que amplían perspectivas y encienden
+          nuevas ideas. La inspiración como práctica cotidiana.
+        </p>
+      </Card>
+    </div>
+  </Section>
+
+  <!-- REDES SOCIALES -->
+  <Section id="redes" spacing="xl" labelledBy="redes-heading">
+    <h2 id="redes-heading" class="font-display text-3xl sm:text-4xl text-text mb-2">
+      Seguinos en redes
+    </h2>
+    <p class="text-text-muted mb-10 max-w-prose">
+      La comunidad también vive en las redes. Compartimos contenido, novedades
+      y el detrás de escena del programa cada semana.
+    </p>
+    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+      {socialLinks.map(({ icon, label, handle, url }) => (
+        <li>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${SITE.name} en ${label}`}
+            class="flex items-center gap-4 p-4 rounded-xl border border-border bg-surface hover:border-primary hover:shadow-card-hover transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+          >
+            <Icon name={icon} size="lg" class="text-primary flex-shrink-0" />
+            <div class="min-w-0">
+              <p class="font-semibold text-text text-sm">{label}</p>
+              <p class="text-text-muted text-xs">{handle}</p>
+            </div>
+            <Icon name="external-link" size="sm" class="ml-auto text-text-muted flex-shrink-0" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <!-- CTA CONTACTO -->
+  <Section id="comunidad-cta" spacing="xl" background="alt" labelledBy="comunidad-cta-heading">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 max-w-2xl">
+      <div>
+        <h2 id="comunidad-cta-heading" class="font-display text-2xl sm:text-3xl text-text mb-2">
+          ¿Tenés una pregunta?
+        </h2>
+        <p class="text-text-muted leading-relaxed">
+          Escribinos y con gusto te respondemos.
+        </p>
+      </div>
+      <div class="flex-shrink-0">
+        <Button href="/contacto" size="lg">Contactanos</Button>
+      </div>
+    </div>
+  </Section>
+
 </PageLayout>

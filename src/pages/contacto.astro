@@ -1,14 +1,143 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import { resolveSeo, buildCanonical } from '@/config';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Input from '@/components/ui/Input.astro';
+import Textarea from '@/components/ui/Textarea.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { SITE, CONTACT, SOCIAL, resolveSeo, buildCanonical } from '@/config';
 
 const seo = resolveSeo({
   title: 'Contacto',
-  description: 'Ponete en contacto con Inspira Mujer.',
+  description: `Escribinos a ${CONTACT.email}. Estamos en ${CONTACT.location}.`,
   canonical: buildCanonical('/contacto'),
 });
+
+const instagramUrl = SOCIAL.instagram;
 ---
 
 <PageLayout seo={seo}>
-  <h1>Contacto</h1>
+
+  <!-- INTRO -->
+  <Section id="contacto-intro" spacing="xl" labelledBy="contacto-heading">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
+        {SITE.name}
+      </p>
+      <h1
+        id="contacto-heading"
+        class="font-display text-4xl sm:text-5xl text-text leading-tight mb-6"
+      >
+        Contacto
+      </h1>
+      <p class="text-lg text-text-muted leading-relaxed">
+        Tenés una pregunta, una propuesta o simplemente querés decir hola.
+        Escribinos y te respondemos a la brevedad.
+      </p>
+    </div>
+  </Section>
+
+  <!-- FORMULARIO + INFO -->
+  <Section id="contacto-form-info" spacing="xl" background="alt" labelledBy="form-heading">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16">
+
+      <!-- Formulario -->
+      <div>
+        <h2 id="form-heading" class="font-display text-2xl text-text mb-6">
+          Envianos un mensaje
+        </h2>
+        <!-- Formulario UI placeholder — integración con automationService.triggerContact()
+             y conexión a n8n pendiente para Etapa 11 (automatizaciones) -->
+        <form
+          aria-labelledby="form-heading"
+          class="flex flex-col gap-5"
+        >
+          <Input
+            id="nombre"
+            name="nombre"
+            label="Nombre"
+            placeholder="Tu nombre"
+            required
+            autocomplete="name"
+          />
+          <Input
+            id="email"
+            name="email"
+            label="Correo electrónico"
+            type="email"
+            placeholder="tu@email.com"
+            required
+            autocomplete="email"
+          />
+          <Textarea
+            id="mensaje"
+            name="mensaje"
+            label="Mensaje"
+            placeholder="¿En qué te podemos ayudar?"
+            required
+            rows={6}
+          />
+          <div class="pt-1">
+            <Button type="submit" size="lg">Enviar mensaje</Button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Información de contacto -->
+      <div class="flex flex-col gap-8">
+        <div>
+          <h2 class="font-display text-2xl text-text mb-6">
+            Información de contacto
+          </h2>
+          <ul class="flex flex-col gap-4">
+            <li class="flex items-start gap-3">
+              <Icon name="mail" size="md" class="text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <p class="text-sm font-semibold text-text mb-0.5">Correo electrónico</p>
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  class="text-text-muted text-sm hover:text-text transition-colors focus-visible:outline-none focus-visible:underline"
+                >
+                  {CONTACT.email}
+                </a>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <Icon name="map-pin" size="md" class="text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <p class="text-sm font-semibold text-text mb-0.5">Ubicación</p>
+                <p class="text-text-muted text-sm">{CONTACT.location}</p>
+              </div>
+            </li>
+            {instagramUrl ? (
+              <li class="flex items-start gap-3">
+                <Icon name="instagram" size="md" class="text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                  <p class="text-sm font-semibold text-text mb-0.5">Instagram</p>
+                  <a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-text-muted text-sm hover:text-text transition-colors focus-visible:outline-none focus-visible:underline"
+                  >
+                    @inspiramujer
+                  </a>
+                </div>
+              </li>
+            ) : null}
+          </ul>
+        </div>
+
+        <div class="p-5 rounded-xl bg-surface border border-border">
+          <p class="text-sm font-semibold text-text mb-1">Tiempo de respuesta</p>
+          <p class="text-text-muted text-sm leading-relaxed">
+            Respondemos en un plazo de 24 a 48 horas hábiles. Para consultas
+            urgentes, escribinos directamente por Instagram.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </Section>
+
 </PageLayout>

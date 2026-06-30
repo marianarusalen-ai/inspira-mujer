@@ -6,6 +6,34 @@ Versionado semántico: [SemVer](https://semver.org/).
 
 ---
 
+## [0.5.0] — 2026-06-30
+
+### Agregado
+- `/programa` — contenido real: descripción de Inspira Mujer Live (`SITE.program.*`), sección "Cómo participar" con Cards Cuándo/Dónde, grid FEATURED_TEAM con bio opcional, CTA a `/comunidad`
+- `/comunidad` — contenido real: texto editorial de tejido/macramé/crochet, 3 pilares (Crear, Compartir, Inspirar), sección de redes sociales con `Icon` y links tipados de `SOCIAL`, CTA a `/contacto`
+- `/recursos` — placeholder con CTAs a `SOCIAL.instagram` y `SOCIAL.youtube`; punto de extensión para `src/content/blog/`
+- `/eventos` — placeholder expandido con tipos de eventos (Talleres, Clases, Encuentros), CTA a `/contacto`; punto de extensión para `src/content/eventos/`
+- `/contacto` — formulario UI (nombre, email, mensaje) con `Input`/`Textarea`, info de contacto con `CONTACT.email` y `CONTACT.location`, columna de respuesta estimada; integración con `automationService.triggerContact()` documentada como pending
+
+---
+
+## [0.4.0] — 2026-06-30
+
+### Agregado
+- Home completa con 5 secciones en `src/pages/index.astro`
+- Sección Hero: `h1` con tagline de `SITE`, texto descriptivo, CTAs primario y secundario, composición geométrica con Design Tokens (sin imágenes)
+- Sección El Programa: nombre, descripción, frecuencia, horario y plataformas de `SITE.program` con `Badge`
+- Sección Equipo: grid responsive 1→2→3 columnas, `Card` con avatar circular para cada integrante de `FEATURED_TEAM`
+- Sección Comunidad CTA: fondo oscuro con `Badge` y `Button` hacia `/comunidad`
+- Sección Eventos: `Card` placeholder "Próximamente" con punto de extensión documentado para `map(events)`
+- `SITE.program` en `src/config/site.ts` — nombre, frecuencia, horario, plataformas y descripción del programa en vivo
+
+### Modificado
+- `Button.astro` — variante `primary`: `text-text-inverse` → `text-text` + `hover:bg-primary-dark` → `hover:bg-primary-light` para alcanzar contraste WCAG AA 4.5:1 (de 3.34:1 a 5.77:1)
+- `Button.astro` — variante `outline`, estado hover: `hover:text-text-inverse` → `hover:text-text` para alcanzar contraste WCAG AA 4.5:1 (de 3.34:1 a 5.77:1)
+
+---
+
 ## [0.3.0] — 2026-06-29
 
 ### Agregado

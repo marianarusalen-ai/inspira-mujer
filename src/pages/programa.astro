@@ -1,14 +1,121 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import { resolveSeo, buildCanonical } from '@/config';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Card from '@/components/ui/Card.astro';
+import { SITE, resolveSeo, buildCanonical } from '@/config';
+import { FEATURED_TEAM } from '@/data';
 
 const seo = resolveSeo({
   title: 'El Programa',
-  description: 'Conocé el programa de Inspira Mujer y cómo podés participar.',
+  description:
+    'Conocé Inspira Mujer Live: conversaciones, entrevistas y reflexiones para mujeres que crean, todos los martes a las 20:00 hs (ARG).',
   canonical: buildCanonical('/programa'),
 });
 ---
 
 <PageLayout seo={seo}>
-  <h1>El Programa</h1>
+
+  <!-- INTRO -->
+  <Section id="programa-intro" spacing="xl" labelledBy="programa-heading">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
+        {SITE.name}
+      </p>
+      <h1
+        id="programa-heading"
+        class="font-display text-4xl sm:text-5xl text-text leading-tight mb-6"
+      >
+        El Programa
+      </h1>
+      <p class="text-lg text-text-muted leading-relaxed mb-8">
+        {SITE.program.description}
+      </p>
+      <div class="flex flex-wrap gap-2">
+        <Badge variant="primary">{SITE.program.frequency}</Badge>
+        <Badge>{SITE.program.schedule}</Badge>
+        {SITE.program.platforms.map((platform) => (
+          <Badge variant="info">{platform}</Badge>
+        ))}
+      </div>
+    </div>
+  </Section>
+
+  <!-- CÓMO PARTICIPAR -->
+  <Section id="como-participar" spacing="xl" background="alt" labelledBy="participar-heading">
+    <h2 id="participar-heading" class="font-display text-3xl sm:text-4xl text-text mb-8">
+      Cómo participar
+    </h2>
+    <div class="grid sm:grid-cols-2 gap-6 max-w-2xl">
+      <Card>
+        <h3 class="font-display font-bold text-lg text-text mb-3">Cuándo</h3>
+        <p class="text-text-muted text-sm leading-relaxed mb-3">
+          El programa se emite en vivo cada semana. Podés sumarte al momento
+          o ver la repetición cuando más te convenga.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <Badge variant="primary">{SITE.program.frequency}</Badge>
+          <Badge>{SITE.program.schedule}</Badge>
+        </div>
+      </Card>
+      <Card>
+        <h3 class="font-display font-bold text-lg text-text mb-3">Dónde</h3>
+        <p class="text-text-muted text-sm leading-relaxed mb-3">
+          Transmitimos en vivo en nuestras plataformas. Seguinos para recibir
+          la notificación al empezar cada emisión.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          {SITE.program.platforms.map((platform) => (
+            <Badge variant="info">{platform}</Badge>
+          ))}
+        </div>
+      </Card>
+    </div>
+  </Section>
+
+  <!-- CONDUCIDO POR -->
+  <Section id="conducido-por" spacing="xl" labelledBy="equipo-heading">
+    <h2 id="equipo-heading" class="font-display text-3xl sm:text-4xl text-text mb-2">
+      Conducido por
+    </h2>
+    <p class="text-text-muted mb-10 max-w-prose">
+      Cada semana Mariana, Irene y Eli crean un espacio cálido, honesto
+      y motivador para mujeres que crean.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {FEATURED_TEAM.map((member) => (
+        <Card>
+          <div slot="image" class="flex justify-center pt-8 pb-4 bg-surface-alt">
+            <div
+              class="w-20 h-20 rounded-full bg-gradient-to-br from-primary/30 to-secondary/20"
+              aria-hidden="true"
+            ></div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <h3 class="font-display font-bold text-lg text-text">{member.name}</h3>
+            <p class="text-primary text-sm font-semibold">{member.role}</p>
+            {member.bio ? (
+              <p class="text-text-muted text-sm leading-relaxed">{member.bio}</p>
+            ) : null}
+          </div>
+        </Card>
+      ))}
+    </div>
+  </Section>
+
+  <!-- CTA -->
+  <Section id="programa-cta" spacing="xl" background="dark" labelledBy="programa-cta-heading">
+    <div class="flex flex-col items-center text-center gap-6 max-w-xl mx-auto">
+      <h2 id="programa-cta-heading" class="font-display text-3xl sm:text-4xl text-text-inverse">
+        ¿Querés ser parte?
+      </h2>
+      <p class="text-text-inverse leading-relaxed">
+        La comunidad es el lugar donde la conversación continúa entre episodio y episodio.
+        Un espacio para seguir creciendo, compartir y conectar.
+      </p>
+      <Button href="/comunidad" size="lg">Sumate a la comunidad</Button>
+    </div>
+  </Section>
+
 </PageLayout>

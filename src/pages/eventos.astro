@@ -1,14 +1,90 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import { resolveSeo, buildCanonical } from '@/config';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Card from '@/components/ui/Card.astro';
+import { SITE, resolveSeo, buildCanonical } from '@/config';
 
 const seo = resolveSeo({
   title: 'Eventos',
-  description: 'Talleres, encuentros y eventos de Inspira Mujer.',
+  description:
+    'Talleres, clases y encuentros de Inspira Mujer. Tejido, macramé, crochet y espacios de aprendizaje para mujeres que crean.',
   canonical: buildCanonical('/eventos'),
 });
 ---
 
 <PageLayout seo={seo}>
-  <h1>Eventos</h1>
+
+  <!-- INTRO -->
+  <Section id="eventos-intro" spacing="xl" labelledBy="eventos-heading">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
+        {SITE.name}
+      </p>
+      <h1
+        id="eventos-heading"
+        class="font-display text-4xl sm:text-5xl text-text leading-tight mb-6"
+      >
+        Eventos
+      </h1>
+      <p class="text-lg text-text-muted leading-relaxed">
+        Talleres, clases y encuentros diseñados para mujeres que quieren aprender
+        y conectar. Desde técnicas de tejido hasta espacios de conversación grupal,
+        cada evento es una oportunidad de crecer en comunidad.
+      </p>
+    </div>
+  </Section>
+
+  <!-- QUÉ TIPO DE EVENTOS -->
+  <Section id="tipos-eventos" spacing="xl" background="alt" labelledBy="tipos-heading">
+    <h2 id="tipos-heading" class="font-display text-3xl sm:text-4xl text-text mb-8">
+      ¿Qué tipo de eventos hacemos?
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+      <Card>
+        <div class="w-10 h-10 rounded-full bg-primary/20 mb-4" aria-hidden="true"></div>
+        <h3 class="font-display font-bold text-lg text-text mb-2">Talleres</h3>
+        <p class="text-text-muted text-sm leading-relaxed">
+          Sesiones prácticas de tejido, macramé o crochet con una instructora
+          guiando paso a paso. Para todos los niveles.
+        </p>
+      </Card>
+      <Card>
+        <div class="w-10 h-10 rounded-full bg-secondary/30 mb-4" aria-hidden="true"></div>
+        <h3 class="font-display font-bold text-lg text-text mb-2">Clases</h3>
+        <p class="text-text-muted text-sm leading-relaxed">
+          Clases temáticas donde profundizamos en técnicas específicas,
+          puntos, materiales o proyectos completos.
+        </p>
+      </Card>
+      <Card>
+        <div class="w-10 h-10 rounded-full bg-accent/20 mb-4" aria-hidden="true"></div>
+        <h3 class="font-display font-bold text-lg text-text mb-2">Encuentros</h3>
+        <p class="text-text-muted text-sm leading-relaxed">
+          Espacios de conversación y comunidad donde compartimos proyectos,
+          experiencias y el proceso creativo sin presiones.
+        </p>
+      </Card>
+    </div>
+
+    <!-- Reemplazar por events.map((event) => <Card href={...}>...</Card>) cuando existan entradas en src/content/eventos/ -->
+    <div>
+      <h3 class="font-display text-2xl text-text mb-6">Próximos eventos</h3>
+      <Card>
+        <div class="flex flex-col gap-3">
+          <Badge variant="primary">Próximamente</Badge>
+          <p class="text-text-muted leading-relaxed">
+            Los próximos talleres, clases y encuentros de Inspira Mujer aparecerán
+            aquí en cuanto estén disponibles. Seguinos en redes para enterarte primero
+            y reservar tu lugar.
+          </p>
+          <div class="pt-2">
+            <Button href="/contacto" variant="outline">Avisame cuando haya eventos</Button>
+          </div>
+        </div>
+      </Card>
+    </div>
+  </Section>
+
 </PageLayout>
