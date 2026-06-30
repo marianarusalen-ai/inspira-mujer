@@ -1,0 +1,44 @@
+---
+import { cn } from '@/lib';
+
+interface Props {
+  href?: string;
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+
+const base =
+  'rounded-xl border border-border bg-surface overflow-hidden shadow-card transition-shadow duration-250';
+const hoverClasses = href ? 'hover:shadow-card-hover cursor-pointer group' : '';
+
+const classes = cn(base, hoverClasses, className);
+---
+
+{
+  href ? (
+    <a href={href} class={classes}>
+      <slot name="image" />
+      <div class="p-5">
+        <slot />
+      </div>
+      {Astro.slots.has('footer') && (
+        <div class="px-5 pb-5 pt-0 border-t border-border mt-4">
+          <slot name="footer" />
+        </div>
+      )}
+    </a>
+  ) : (
+    <div class={classes}>
+      <slot name="image" />
+      <div class="p-5">
+        <slot />
+      </div>
+      {Astro.slots.has('footer') && (
+        <div class="px-5 pb-5 pt-0 border-t border-border mt-4">
+          <slot name="footer" />
+        </div>
+      )}
+    </div>
+  )
+}

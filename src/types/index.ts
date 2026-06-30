@@ -117,7 +117,7 @@ export interface ApiResponse<T> {
 
 // --- UI Components ---
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 export type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
 
 // --- i18n ---

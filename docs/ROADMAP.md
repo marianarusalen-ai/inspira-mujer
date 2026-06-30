@@ -44,3 +44,14 @@ Gestión de contactos, seguimiento de leads, historial.
 
 ## Etapa 15 — Analytics y monitoreo
 Google Analytics 4, Lighthouse CI, alertas de performance.
+
+---
+
+## Consideraciones Técnicas Futuras
+
+### Migración Astro 7 + Tailwind CSS v4
+- **Estado**: Pendiente de evaluación
+- **Contexto**: `npm create astro` instala Astro 7 por defecto. El proyecto usa Astro 5.18.2 + Tailwind CSS 3 por compatibilidad con `@astrojs/tailwind@3`.
+- **Tailwind v4** usa CSS nativo (sin wrapper de integración) y cambia la configuración radicalmente.
+- **Recomendación**: Evaluar migración una vez que la arquitectura de componentes esté estabilizada (post Etapa 4).
+- **Impacto**: Requiere reescribir `tailwind.config.mjs` y posiblemente ajustar `global.css`.

@@ -1,0 +1,28 @@
+---
+import { cn } from '@/lib';
+import type { BadgeVariant } from '@/types';
+
+interface Props {
+  variant?: BadgeVariant;
+  class?: string;
+}
+
+const { variant = 'default', class: className } = Astro.props;
+
+const base = 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold';
+
+const variants: Record<BadgeVariant, string> = {
+  default: 'bg-border text-text-muted',
+  primary: 'bg-primary/15 text-primary-dark',
+  success: 'bg-success/15 text-success',
+  warning: 'bg-warning/15 text-warning',
+  error: 'bg-error/15 text-error',
+  info: 'bg-info/15 text-info',
+};
+
+const classes = cn(base, variants[variant], className);
+---
+
+<span class={classes}>
+  <slot />
+</span>
