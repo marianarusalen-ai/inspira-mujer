@@ -50,6 +50,15 @@ src/
 └── types/        — Interfaces TypeScript
 ```
 
+## Arquitectura
+
+| Documento | Descripción |
+| --------- | ----------- |
+| [docs/ADR.md](docs/ADR.md) | Registro de decisiones de arquitectura (Architecture Decision Records) |
+| [docs/architecture.mmd](docs/architecture.mmd) | Diagrama de arquitectura en formato Mermaid |
+| [docs/TREE.md](docs/TREE.md) | Snapshot de la estructura de carpetas del proyecto |
+| [docs/CHANGELOG.md](docs/CHANGELOG.md) | Historial de cambios por etapa (Keep a Changelog) |
+
 ## Agregar una página
 
 1. Crear `src/pages/mi-pagina.astro`

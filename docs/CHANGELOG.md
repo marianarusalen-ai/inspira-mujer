@@ -1,5 +1,44 @@
 # Changelog
 
+Todos los cambios notables de este proyecto se documentan en este archivo.
+Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
+Versionado semántico: [SemVer](https://semver.org/).
+
+---
+
+## [0.3.0] — 2026-06-29
+
+### Agregado
+- `Section.astro` — contenedor responsive con max-width y padding horizontal
+- `Header.astro` extraído como componente en `src/components/common/`
+- `Footer.astro` extraído como componente en `src/components/common/`
+- Header sticky con fondo semi-transparente y blur en scroll
+- Navegación principal con `aria-current="page"` dinámico
+- Helper `isActive()` para detección de enlace activo por ruta
+- Menú mobile con `<details>/<summary>` sin JavaScript adicional
+- Slot `cta` en Header para botón de llamada a la acción intercambiable por página
+- Footer con 4 columnas: marca, comunidad, programa, contacto
+- Restauración de foco al botón hamburguesa al cerrar menú (Escape y clic exterior)
+
+### Modificado
+- `PageLayout.astro` — Header y Footer delegados a sus componentes dedicados
+
+---
+
+## [0.2.0] — 2026-06-29
+
+### Agregado
+- `Button.astro` — variantes `primary`, `secondary`, `ghost`, `outline`; tamaños `sm`, `md`, `lg`
+- `Badge.astro` — variantes de color y tamaño, accesible
+- `Card.astro` — contenedor con borde, sombra y radio configurables
+- `Icon.astro` — wrapper SVG con control de tamaño y atributo `aria-hidden` automático
+- `Tag.astro` — etiqueta inline para categorías y metadatos
+- `Input.astro` — campo de texto con label, mensaje de error y texto de ayuda
+- `Textarea.astro` — área de texto con las mismas props que `Input`
+- Página `/dev/ui-kit` — catálogo visual de todos los componentes UI (solo entorno de desarrollo)
+
+---
+
 ## [0.1.0] — 2026-06-29
 
 ### Agregado

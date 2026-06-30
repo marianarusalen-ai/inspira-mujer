@@ -1,0 +1,22 @@
+graph TD
+    GHA["GitHub Actions\nCI/CD"]
+    GHP["GitHub Pages\ninspiramujer.com.ar"]
+
+    subgraph src ["src/"]
+        Pages["Pages\n(pages/)"]
+        Layouts["Layouts\n(layouts/)"]
+        Components["Components\n(components/)"]
+        Config["Config\n(config/)"]
+        Services["Services\n(services/)"]
+        Content["Content\n(content/)"]
+    end
+
+    Pages -->|usa| Layouts
+    Layouts -->|incluye| Components
+    Components -->|lee| Config
+    Pages -->|consulta| Content
+    Pages -->|llama| Services
+    Services -->|lee| Config
+
+    src -->|astro build| GHA
+    GHA -->|deploy| GHP
