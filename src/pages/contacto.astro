@@ -1,0 +1,14 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { resolveSeo, buildCanonical } from '@/config';
+
+const seo = resolveSeo({
+  title: 'Contacto',
+  description: 'Ponete en contacto con Inspira Mujer.',
+  canonical: buildCanonical('/contacto'),
+});
+---
+
+<PageLayout seo={seo}>
+  <h1>Contacto</h1>
+</PageLayout>

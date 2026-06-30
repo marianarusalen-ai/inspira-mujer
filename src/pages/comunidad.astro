@@ -1,0 +1,14 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { resolveSeo, buildCanonical } from '@/config';
+
+const seo = resolveSeo({
+  title: 'Comunidad',
+  description: 'Conectate con otras mujeres que crean, tejen y se inspiran.',
+  canonical: buildCanonical('/comunidad'),
+});
+---
+
+<PageLayout seo={seo}>
+  <h1>Comunidad</h1>
+</PageLayout>

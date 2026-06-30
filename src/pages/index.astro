@@ -1,0 +1,19 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { resolveSeo, buildCanonical } from '@/config';
+
+const seo = resolveSeo({
+  title: 'Inicio',
+  description:
+    'Comunidad de mujeres que crean, tejen y se inspiran. General Roca, Río Negro, Argentina.',
+  canonical: buildCanonical('/'),
+  ogType: 'website',
+});
+---
+
+<PageLayout seo={seo}>
+  <section>
+    <h1>Inspira Mujer</h1>
+    <p>Comunidad de mujeres que crean, tejen y se inspiran.</p>
+  </section>
+</PageLayout>

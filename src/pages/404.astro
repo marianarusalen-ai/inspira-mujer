@@ -1,0 +1,17 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { resolveSeo, buildCanonical } from '@/config';
+
+const seo = resolveSeo({
+  title: 'Página no encontrada',
+  description: 'La página que buscás no existe o fue movida.',
+  canonical: buildCanonical('/404'),
+  noIndex: true,
+});
+---
+
+<PageLayout seo={seo}>
+  <h1>404 — Página no encontrada</h1>
+  <p>La página que buscás no existe o fue movida.</p>
+  <a href="/">Volver al inicio</a>
+</PageLayout>

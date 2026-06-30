@@ -1,0 +1,83 @@
+---
+import '@/styles/global.css';
+import type { SeoProps } from '@/types';
+import { SITE, SOCIAL, TWITTER_HANDLE } from '@/config';
+
+interface Props {
+  seo: SeoProps;
+}
+
+const { seo } = Astro.props;
+
+const jsonLdOrganization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.name,
+  url: SITE.url,
+  logo: `${SITE.url}/icons/logo.svg`,
+  sameAs: Object.values(SOCIAL).filter((v) => typeof v === 'string' && v.startsWith('http')),
+  location: {
+    '@type': 'Place',
+    name: SITE.location,
+  },
+};
+
+const jsonLdWebsite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.tagline,
+  inLanguage: SITE.language,
+};
+---
+
+<!doctype html>
+<html lang={SITE.language} dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Primary Meta -->
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <meta name="author" content={SITE.author.name} />
+    <meta name="theme-color" content={SITE.themeColor} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Canonical & Robots -->
+    <link rel="canonical" href={seo.canonical} />
+    {seo.noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={seo.ogType} />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:url" content={seo.canonical} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    {seo.ogImage && <meta property="og:image" content={seo.ogImage} />}
+    {seo.ogImageAlt && <meta property="og:image:alt" content={seo.ogImageAlt} />}
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={TWITTER_HANDLE} />
+    <meta name="twitter:title" content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    {seo.ogImage && <meta name="twitter:image" content={seo.ogImage} />}
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLdOrganization)} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLdWebsite)} />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Ir al contenido principal</a>
+    <slot />
+  </body>
+</html>

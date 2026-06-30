@@ -1,0 +1,14 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { resolveSeo, buildCanonical } from '@/config';
+
+const seo = resolveSeo({
+  title: 'Recursos',
+  description: 'Materiales, guías y herramientas para tu crecimiento personal y profesional.',
+  canonical: buildCanonical('/recursos'),
+});
+---
+
+<PageLayout seo={seo}>
+  <h1>Recursos</h1>
+</PageLayout>
