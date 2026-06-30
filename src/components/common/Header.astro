@@ -23,7 +23,7 @@ const isActive = (href: string): boolean => currentPath === href;
     <!-- Logo -->
     <a
       href="/"
-      class="font-display font-bold text-xl text-text hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+      class="font-display font-bold text-xl text-text hover:text-link transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
       aria-label={`${SITE.name} — Inicio`}
     >
       {SITE.name}
@@ -40,7 +40,7 @@ const isActive = (href: string): boolean => currentPath === href;
               class={cn(
                 'px-3 py-2 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                 isActive(item.href)
-                  ? 'text-primary bg-primary/10 font-semibold'
+                  ? 'text-link bg-primary/10 font-semibold'
                   : 'text-text-muted hover:text-text hover:bg-surface-alt'
               )}
             >
@@ -88,7 +88,7 @@ const isActive = (href: string): boolean => currentPath === href;
                   class={cn(
                     'block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                     isActive(item.href)
-                      ? 'text-primary bg-primary/10 font-semibold'
+                      ? 'text-link bg-primary/10 font-semibold'
                       : 'text-text-muted hover:text-text hover:bg-surface-alt'
                   )}
                 >

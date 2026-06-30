@@ -8,6 +8,10 @@
   --color-secondary-light: #d9c4bc;
   --color-accent: #9b7ec8;
 
+  /* Colors — Link (desacoplado de --color-primary para garantizar WCAG AA 4.5:1 en texto) */
+  --color-link: #c4317d;
+  --color-link-hover: #a32968;
+
   /* Colors — Surface */
   --color-surface: #ffffff;
   --color-surface-alt: #faf7f8;
@@ -146,13 +150,13 @@ h6 {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
 a:hover {
-  color: var(--color-primary-dark);
+  color: var(--color-link-hover);
 }
 
 img,

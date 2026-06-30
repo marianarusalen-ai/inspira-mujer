@@ -148,7 +148,7 @@ Cada servicio externo vive en `src/services/` con su propia interfaz TypeScript.
 
 ## ADR-007 — Contraste WCAG AA del color primario usado como texto
 
-**Estado:** Pendiente  
+**Estado:** Aceptado — Implementado (Etapa 7)  
 **Fecha:** 2026-06-30
 
 ### Contexto
@@ -156,29 +156,41 @@ Cada servicio externo vive en `src/services/` con su propia interfaz TypeScript.
 
 1. **Decorativo / superficie** — fondos de `Button primary`, relleno de `Badge`, acentos visuales, bordes y elementos geométricos. En estos usos el contraste con el texto superpuesto (texto oscuro sobre fondo primario) fue corregido a 5.77:1 en Etapa 5.
 
-2. **Texto / link** — clase `text-primary`, selector global `a { color: var(--color-primary) }` en `src/styles/global.css`, eyebrow labels (`text-sm font-semibold uppercase tracking-widest`), `member.role` en las cards del equipo. Sobre fondos claros (`bg-surface` #ffffff, `bg-surface-alt` #faf7f8) el contraste es **3.34:1**, por debajo del mínimo WCAG AA de 4.5:1 para texto normal.
+2. **Texto / link** — clase `text-primary`, selector global `a { color: var(--color-primary) }` en `src/styles/global.css`, eyebrow labels (`text-sm font-semibold uppercase tracking-widest`), `member.role` en las cards del equipo. Sobre fondos claros (`bg-surface` #ffffff, `bg-surface-alt` #faf7f8) el contraste era **~3.6:1**, por debajo del mínimo WCAG AA de 4.5:1 para texto normal.
 
-El problema es sistémico: se arrastra desde el scaffold inicial y afecta a toda la aplicación. No se detectó como bloqueante hasta Etapa 5, cuando se auditaron los contrastes de botones.
+El problema era sistémico: se arrastraba desde el scaffold inicial y afectaba toda la aplicación. No se detectó como bloqueante hasta Etapa 5, cuando se auditaron los contrastes de botones.
 
-### Opciones en evaluación
+### Opciones evaluadas
 
 **Opción A — Oscurecer `--color-primary`**  
 Cambiar el valor del token (ej. a ~#a03070, contraste ~5.2:1 sobre blanco).  
-Ventaja: solución en un solo lugar, consistencia total.  
-Desventaja: modifica el color de marca en toda la UI — botones, badges, decoraciones — y puede alejarse de la identidad visual aprobada.
+Desventaja: modifica el color de marca en toda la UI — botones, badges, decoraciones — y aleja la identidad visual aprobada. **Descartada.**
 
-**Opción B — Introducir `--color-link` separado**  
-Mantener `--color-primary` (#da599b) para uso decorativo/superficie; definir un nuevo token `--color-link` con valor más oscuro (ej. #8c2060, contraste ~5.8:1 sobre blanco). Reemplazar `text-primary` y el selector global `a { color }` para que usen `--color-link`.  
-Ventaja: la identidad visual de botones y decoraciones no cambia.  
-Desventaja: duplica la responsabilidad del color de marca; requiere auditar y actualizar todos los usos de `text-primary` existentes.
+**Opción B — Introducir `--color-link` separado** ✓ *Implementada*  
+Mantener `--color-primary` (#da599b) para uso decorativo/superficie; definir un nuevo token `--color-link` con valor más oscuro derivado del mismo hue.  
+Ventaja: la identidad visual de botones y decoraciones no cambia; el design system expresa correctamente la diferencia semántica entre "color de marca" y "color de texto interactivo".
 
-**Opción C — Parches locales (descartada)**  
-Aplicar colores más oscuros solo en los componentes donde falla. Descartada: perpetúa la inconsistencia y hace el design system impredecible.
+**Opción C — Parches locales**  
+Descartada: perpetúa la inconsistencia y hace el design system impredecible.
 
 ### Decisión
-**Pendiente.** No se toma en Etapa 6 para no alterar el design system sin consenso sobre el impacto visual de marca. La decisión requiere revisar la paleta con criterio de diseño antes de implementarse.
+Implementar **Opción B**: introducir `--color-link` como token separado de `--color-primary`.
+
+Valores finales calculados (mismo hue 329°, saturación 60%, ajustando lightness para WCAG AA):
+
+| Token | Valor | Contraste / blanco | Contraste / surface-alt |
+|---|---|---|---|
+| `--color-link` | `#c4317d` | **5.15:1** ✓ | **4.87:1** ✓ |
+| `--color-link-hover` | `#a32968` | **6.83:1** ✓ | **6.47:1** ✓ |
+
+### Implementación (Etapa 7)
+
+- `src/styles/global.css` — nuevos tokens `--color-link` / `--color-link-hover`; `a { color }` y `a:hover { color }` actualizados
+- `tailwind.config.mjs` — token `link: { DEFAULT, hover }` → genera clases `text-link`, `text-link-hover`
+- Reemplazos de `text-primary` → `text-link` en: `Header.astro` (logo hover, nav activa desktop/mobile), `Button.astro` (variantes outline y ghost), `index.astro`, `programa.astro`, `comunidad.astro`, `recursos.astro`, `eventos.astro`, `contacto.astro` (eyebrow labels y `member.role`)
+- Usos **no modificados** (correcto, son decorativos): `Icon class="text-primary"` (aria-hidden), `border-primary`, `bg-primary`, `focus-visible:ring-primary`, `bg-primary/10`, gradientes del Hero
 
 ### Consecuencias
-- Mientras esta decisión esté pendiente, **no usar `text-primary` para texto de cuerpo o links nuevos** en páginas o componentes nuevos; usar `text-text` o `text-text-muted` en su lugar.
-- Cuando se resuelva, la implementación requerirá: actualizar `src/styles/global.css` (el selector `a` global), actualizar `tailwind.config.mjs` (agregar `link` como token si se elige Opción B), y auditar usos de `text-primary` en todos los componentes existentes.
-- Si se elige Opción B, crear la clase Tailwind `text-link` y reemplazar `text-primary` solo donde el uso es textual, no decorativo.
+- `--color-primary` queda reservado exclusivamente para uso decorativo/superficie. No debe usarse directamente en texto legible.
+- `--color-link` es el color canónico para texto interactivo. Nuevos links, eyebrow labels y roles de texto de marca deben usar `text-link`.
+- Limitación conocida: en secciones con `background="dark"` (`bg-surface-dark` #1a1014), un `<a>` inline heredaría `color: var(--color-link)` (#c4317d) con contraste ~4.0:1 sobre el fondo oscuro — por debajo de WCAG AA. Mitigación: en secciones oscuras, los links inline deben sobreescribirse con `text-text-inverse underline` o evitarse; los CTAs ya usan `Button` que maneja esto correctamente.
