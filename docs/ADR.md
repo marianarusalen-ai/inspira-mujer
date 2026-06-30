@@ -143,3 +143,42 @@ Cada servicio externo vive en `src/services/` con su propia interfaz TypeScript.
 ### Consecuencias
 - Cada servicio externo debe tener su adaptador propio antes de ser usado
 - Las implementaciones reales se añaden en etapas posteriores; los placeholders actuales son solo interfaces TypeScript
+
+---
+
+## ADR-007 — Contraste WCAG AA del color primario usado como texto
+
+**Estado:** Pendiente  
+**Fecha:** 2026-06-30
+
+### Contexto
+`--color-primary` (#da599b) es el color de marca principal. Se usa en dos roles distintos:
+
+1. **Decorativo / superficie** — fondos de `Button primary`, relleno de `Badge`, acentos visuales, bordes y elementos geométricos. En estos usos el contraste con el texto superpuesto (texto oscuro sobre fondo primario) fue corregido a 5.77:1 en Etapa 5.
+
+2. **Texto / link** — clase `text-primary`, selector global `a { color: var(--color-primary) }` en `src/styles/global.css`, eyebrow labels (`text-sm font-semibold uppercase tracking-widest`), `member.role` en las cards del equipo. Sobre fondos claros (`bg-surface` #ffffff, `bg-surface-alt` #faf7f8) el contraste es **3.34:1**, por debajo del mínimo WCAG AA de 4.5:1 para texto normal.
+
+El problema es sistémico: se arrastra desde el scaffold inicial y afecta a toda la aplicación. No se detectó como bloqueante hasta Etapa 5, cuando se auditaron los contrastes de botones.
+
+### Opciones en evaluación
+
+**Opción A — Oscurecer `--color-primary`**  
+Cambiar el valor del token (ej. a ~#a03070, contraste ~5.2:1 sobre blanco).  
+Ventaja: solución en un solo lugar, consistencia total.  
+Desventaja: modifica el color de marca en toda la UI — botones, badges, decoraciones — y puede alejarse de la identidad visual aprobada.
+
+**Opción B — Introducir `--color-link` separado**  
+Mantener `--color-primary` (#da599b) para uso decorativo/superficie; definir un nuevo token `--color-link` con valor más oscuro (ej. #8c2060, contraste ~5.8:1 sobre blanco). Reemplazar `text-primary` y el selector global `a { color }` para que usen `--color-link`.  
+Ventaja: la identidad visual de botones y decoraciones no cambia.  
+Desventaja: duplica la responsabilidad del color de marca; requiere auditar y actualizar todos los usos de `text-primary` existentes.
+
+**Opción C — Parches locales (descartada)**  
+Aplicar colores más oscuros solo en los componentes donde falla. Descartada: perpetúa la inconsistencia y hace el design system impredecible.
+
+### Decisión
+**Pendiente.** No se toma en Etapa 6 para no alterar el design system sin consenso sobre el impacto visual de marca. La decisión requiere revisar la paleta con criterio de diseño antes de implementarse.
+
+### Consecuencias
+- Mientras esta decisión esté pendiente, **no usar `text-primary` para texto de cuerpo o links nuevos** en páginas o componentes nuevos; usar `text-text` o `text-text-muted` en su lugar.
+- Cuando se resuelva, la implementación requerirá: actualizar `src/styles/global.css` (el selector `a` global), actualizar `tailwind.config.mjs` (agregar `link` como token si se elige Opción B), y auditar usos de `text-primary` en todos los componentes existentes.
+- Si se elige Opción B, crear la clase Tailwind `text-link` y reemplazar `text-primary` solo donde el uso es textual, no decorativo.
