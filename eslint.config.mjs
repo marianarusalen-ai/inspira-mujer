@@ -28,6 +28,10 @@ export default [
         extraFileExtensions: ['.astro'],
       },
     },
+    rules: {
+      // Astro uses HTML `for` attribute, not JSX `htmlFor` — this is a false positive
+      'jsx-a11y/label-has-associated-control': 'off',
+    },
   },
   {
     rules: {

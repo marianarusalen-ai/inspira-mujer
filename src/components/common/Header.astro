@@ -1,28 +1,129 @@
 ---
+import { cn } from '@/lib';
 import { SITE, NAV_MAIN } from '@/config';
+import Icon from '@/components/ui/Icon.astro';
 
 interface Props {
   currentPath: string;
 }
 
-const { currentPath } = Astro.props;
+const { currentPath } = Astro.props as Props;
 ---
 
-<header role="banner" id="site-header">
-  <nav aria-label="Navegación principal">
-    <a href="/" aria-label={`${SITE.name} — Inicio`}>
-      <span>{SITE.name}</span>
+<header
+  role="banner"
+  id="site-header"
+  class="sticky top-0 z-50 w-full bg-surface border-b border-border transition-shadow duration-base"
+>
+  <div class="max-w-content mx-auto px-4 sm:px-6 lg:px-8 h-[var(--header-height)] flex items-center justify-between gap-4">
+
+    <!-- Logo -->
+    <a
+      href="/"
+      class="font-display font-bold text-xl text-text hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+      aria-label={`${SITE.name} — Inicio`}
+    >
+      {SITE.name}
     </a>
-    <ul>
-      {
-        NAV_MAIN.map((item) => (
-          <li>
-            <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
+
+    <!-- Desktop nav (md+) -->
+    <nav aria-label="Navegación principal" class="hidden md:flex items-center">
+      <ul class="flex items-center gap-1">
+        {NAV_MAIN.map((item) => {
+          const isActive = currentPath === item.href;
+          return (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isActive ? ('page' as const) : undefined}
+                class={cn(
+                  'px-3 py-2 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                  isActive
+                    ? 'text-primary bg-primary/10 font-semibold'
+                    : 'text-text-muted hover:text-text hover:bg-surface-alt'
+                )}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    <!-- Mobile menu (details/summary — CSS toggle + minimal JS for UX) -->
+    <details class="md:hidden relative" id="mobile-nav-details">
+      <summary
+        class="flex items-center justify-center w-10 h-10 rounded-lg text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer list-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        aria-label="Abrir menú de navegación"
+      >
+        <span class="menu-icon-open">
+          <Icon name="menu" size="md" />
+        </span>
+        <span class="menu-icon-close">
+          <Icon name="close" size="md" />
+        </span>
+      </summary>
+
+      <!-- Mobile panel -->
+      <div
+        id="mobile-nav-panel"
+        class="absolute right-0 top-full mt-2 w-56 rounded-xl bg-surface border border-border shadow-elevated p-2 z-50"
+      >
+        <nav aria-label="Menú de navegación móvil">
+          <ul class="flex flex-col gap-0.5">
+            {NAV_MAIN.map((item) => {
+              const isActive = currentPath === item.href;
+              return (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={isActive ? ('page' as const) : undefined}
+                    class={cn(
+                      'block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                      isActive
+                        ? 'text-primary bg-primary/10 font-semibold'
+                        : 'text-text-muted hover:text-text hover:bg-surface-alt'
+                    )}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
+    </details>
+
+  </div>
 </header>
+
+<style>
+  /* Toggle icons based on details[open] state */
+  #mobile-nav-details .menu-icon-close { display: none; }
+  #mobile-nav-details[open] .menu-icon-open { display: none; }
+  #mobile-nav-details[open] .menu-icon-close { display: flex; }
+
+  /* Remove default disclosure triangle */
+  #mobile-nav-details > summary::-webkit-details-marker { display: none; }
+  #mobile-nav-details > summary::marker { display: none; }
+</style>
+
+<script>
+  // Add scroll shadow
+  const header = document.getElementById('site-header');
+  if (header) {
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('shadow-card', window.scrollY > 4);
+    }, { passive: true });
+  }
+
+  // Close mobile menu when a nav link is clicked
+  document.querySelectorAll('#mobile-nav-panel a').forEach((link) => {
+    link.addEventListener('click', () => {
+      const details = document.getElementById('mobile-nav-details') as HTMLDetailsElement | null;
+      if (details) details.open = false;
+    });
+  });
+</script>
