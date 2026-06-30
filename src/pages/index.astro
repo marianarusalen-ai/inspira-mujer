@@ -1,6 +1,11 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import { resolveSeo, buildCanonical } from '@/config';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Card from '@/components/ui/Card.astro';
+import { SITE, resolveSeo, buildCanonical } from '@/config';
+import { FEATURED_TEAM } from '@/data';
 
 const seo = resolveSeo({
   title: 'Inicio',
@@ -12,8 +17,134 @@ const seo = resolveSeo({
 ---
 
 <PageLayout seo={seo}>
-  <section>
-    <h1>Inspira Mujer</h1>
-    <p>Comunidad de mujeres que crean, tejen y se inspiran.</p>
-  </section>
+
+  <!-- HERO -->
+  <Section id="hero" spacing="xl" labelledBy="hero-heading">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+      <div class="flex flex-col gap-6">
+        <p class="text-sm font-semibold uppercase tracking-widest text-primary">
+          {SITE.name}
+        </p>
+        <h1
+          id="hero-heading"
+          class="font-display text-4xl sm:text-5xl lg:text-6xl leading-tight text-text"
+        >
+          {SITE.tagline}
+        </h1>
+        <p class="text-lg text-text-muted leading-relaxed max-w-prose">
+          Una plataforma digital para mujeres que quieren aprender, crecer y conectar
+          con una comunidad que las inspira cada semana.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <Button href="/programa" size="lg">Conocé el programa</Button>
+          <Button href="/comunidad" variant="outline" size="lg">Sumate a la comunidad</Button>
+        </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        class="relative aspect-square max-w-sm mx-auto w-full overflow-hidden rounded-3xl"
+      >
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/5"></div>
+        <div class="absolute -top-8 -right-8 w-56 h-56 rounded-full bg-primary/20"></div>
+        <div class="absolute -bottom-8 -left-8 w-48 h-48 rounded-full bg-secondary/25"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-accent/20"></div>
+        <div class="absolute top-1/4 right-1/3 w-12 h-12 rounded-full bg-primary/30"></div>
+        <div class="absolute bottom-1/3 left-1/3 w-8 h-8 rounded-full bg-secondary/30"></div>
+        <div class="absolute inset-10 rounded-2xl border border-primary/25"></div>
+      </div>
+
+    </div>
+  </Section>
+
+  <!-- EL PROGRAMA -->
+  <Section id="programa-preview" spacing="xl" background="alt" labelledBy="programa-heading">
+    <div class="max-w-2xl">
+      <h2
+        id="programa-heading"
+        class="font-display text-3xl sm:text-4xl text-text mb-4"
+      >
+        {SITE.program.name}
+      </h2>
+      <p class="text-text-muted leading-relaxed mb-6">
+        {SITE.program.description}
+      </p>
+      <div class="flex flex-wrap gap-2 mb-8">
+        <Badge variant="primary">{SITE.program.frequency}</Badge>
+        <Badge>{SITE.program.schedule}</Badge>
+        {SITE.program.platforms.map((platform) => (
+          <Badge variant="info">{platform}</Badge>
+        ))}
+      </div>
+      <Button href="/programa">Conocer más</Button>
+    </div>
+  </Section>
+
+  <!-- EQUIPO -->
+  <Section id="equipo" spacing="xl" labelledBy="equipo-heading">
+    <h2 id="equipo-heading" class="font-display text-3xl sm:text-4xl text-text mb-2">
+      Quiénes somos
+    </h2>
+    <p class="text-text-muted mb-10 max-w-prose">Las personas detrás de Inspira Mujer.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {FEATURED_TEAM.map((member) => (
+        <Card>
+          <div slot="image" class="flex justify-center pt-8 pb-4 bg-surface-alt">
+            <div
+              class="w-20 h-20 rounded-full bg-gradient-to-br from-primary/30 to-secondary/20"
+              aria-hidden="true"
+            ></div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <h3 class="font-display font-bold text-lg text-text">{member.name}</h3>
+            <p class="text-primary text-sm font-semibold">{member.role}</p>
+            {member.bio ? (
+              <p class="text-text-muted text-sm mt-2 leading-relaxed">{member.bio}</p>
+            ) : null}
+          </div>
+        </Card>
+      ))}
+    </div>
+  </Section>
+
+  <!-- COMUNIDAD CTA -->
+  <Section id="comunidad-cta" spacing="xl" background="dark" labelledBy="comunidad-heading">
+    <div class="flex flex-col items-center text-center gap-6 max-w-2xl mx-auto">
+      <div class="flex flex-wrap justify-center gap-2">
+        <Badge class="!bg-white/10 !text-white">Comunidad</Badge>
+        <Badge class="!bg-white/10 !text-white">Gratuito</Badge>
+      </div>
+      <h2 id="comunidad-heading" class="font-display text-3xl sm:text-4xl text-text-inverse">
+        Formá parte de algo que te inspira
+      </h2>
+      <p class="text-text-inverse leading-relaxed">
+        Cada semana compartimos herramientas, conversaciones y recursos para mujeres
+        que quieren crecer. La comunidad es el lugar donde todo eso cobra vida.
+      </p>
+      <Button href="/comunidad" size="lg">Sumate a la comunidad</Button>
+    </div>
+  </Section>
+
+  <!-- EVENTOS -->
+  <Section id="eventos-preview" spacing="xl" background="alt" labelledBy="eventos-heading">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <h2 id="eventos-heading" class="font-display text-3xl sm:text-4xl text-text">
+        Próximos eventos
+      </h2>
+      <Button href="/eventos" variant="ghost">Ver todos</Button>
+    </div>
+    <!-- Reemplazar por events.map((event) => <Card href={...}>...</Card>) cuando existan entradas en src/content/eventos/ -->
+    <Card>
+      <div class="flex flex-col gap-3">
+        <Badge variant="primary">Próximamente</Badge>
+        <h3 class="font-display font-bold text-xl text-text">Talleres, entrevistas y más</h3>
+        <p class="text-text-muted leading-relaxed">
+          Los próximos eventos, talleres y entrevistas de Inspira Mujer aparecerán
+          aquí en cuanto estén disponibles. Seguinos en redes para enterarte primero.
+        </p>
+      </div>
+    </Card>
+  </Section>
+
 </PageLayout>

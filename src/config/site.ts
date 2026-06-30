@@ -10,4 +10,12 @@ export const SITE = {
   author: {
     name: 'Mariana Rusalen',
   },
+  program: {
+    name: 'Inspira Mujer Live',
+    frequency: 'Todos los martes',
+    schedule: '20:00 hs (ARG)',
+    platforms: ['YouTube', 'Instagram Live'],
+    description:
+      'Un espacio semanal de conversaciones, entrevistas y reflexiones para mujeres que crean, aprenden y se inspiran.',
+  },
 } as const;
