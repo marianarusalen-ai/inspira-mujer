@@ -23,10 +23,10 @@ const isActive = (href: string): boolean => currentPath === href;
     <!-- Logo -->
     <a
       href="/"
-      class="font-display font-bold text-xl text-text hover:text-link transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+      class="inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
       aria-label={`${SITE.name} — Inicio`}
     >
-      {SITE.name}
+      <img src={SITE.logo} alt={SITE.name} class="h-9 w-auto" loading="eager" />
     </a>
 
     <!-- Desktop nav (md+) -->

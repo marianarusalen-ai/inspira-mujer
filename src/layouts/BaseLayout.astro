@@ -14,7 +14,7 @@ const jsonLdOrganization = {
   '@type': 'Organization',
   name: SITE.name,
   url: SITE.url,
-  logo: `${SITE.url}/icons/logo.svg`,
+  logo: `${SITE.url}${SITE.logo}`,
   sameAs: Object.values(SOCIAL).filter((v) => typeof v === 'string' && v.startsWith('http')),
   location: {
     '@type': 'Place',
@@ -50,8 +50,8 @@ const jsonLdWebsite = {
     {seo.noIndex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/icons/favicon.png" />
+    <!-- apple-touch-icon: pendiente (requiere 180×180 px) -->
 
     <!-- Open Graph -->
     <meta property="og:type" content={seo.ogType} />
