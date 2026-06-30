@@ -1,0 +1,54 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/ui/Section.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import { resolveSeo, buildCanonical } from '@/config';
+import { formatDate } from '@/lib';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const seo = resolveSeo({
+  title: post.data.title,
+  description: post.data.description,
+  canonical: buildCanonical(`/recursos/${post.slug}`),
+});
+---
+
+<PageLayout seo={seo}>
+  <Section id="post-content" spacing="xl" width="prose" labelledBy="post-heading">
+    <nav aria-label="Ruta de navegación" class="mb-8">
+      <Button href="/recursos" variant="ghost" size="sm">← Recursos</Button>
+    </nav>
+    <div class="flex flex-wrap gap-2 mb-4">
+      {post.data.tags.map((tag) => <Badge variant="default">{tag}</Badge>)}
+    </div>
+    <h1
+      id="post-heading"
+      class="font-display text-3xl sm:text-4xl text-text leading-tight mb-3"
+    >
+      {post.data.title}
+    </h1>
+    <p class="text-text-muted text-sm mb-10">
+      {post.data.author} · {formatDate(post.data.publishedAt)}
+    </p>
+    <div class="post-body">
+      <Content />
+    </div>
+  </Section>
+</PageLayout>

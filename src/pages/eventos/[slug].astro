@@ -1,0 +1,60 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/ui/Section.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import { resolveSeo, buildCanonical } from '@/config';
+import { formatDate } from '@/lib';
+
+export async function getStaticPaths() {
+  const events = await getCollection('eventos', ({ data }) => !data.draft);
+  return events.map((event) => ({
+    params: { slug: event.slug },
+    props: { event },
+  }));
+}
+
+interface Props {
+  event: CollectionEntry<'eventos'>;
+}
+
+const { event } = Astro.props;
+const { Content } = await render(event);
+
+const seo = resolveSeo({
+  title: event.data.title,
+  description: event.data.description,
+  canonical: buildCanonical(`/eventos/${event.slug}`),
+});
+---
+
+<PageLayout seo={seo}>
+  <Section id="event-content" spacing="xl" width="prose" labelledBy="event-heading">
+    <nav aria-label="Ruta de navegación" class="mb-8">
+      <Button href="/eventos" variant="ghost" size="sm">← Eventos</Button>
+    </nav>
+    <div class="flex flex-wrap gap-2 mb-4">
+      {event.data.tags.map((tag) => <Badge variant="default">{tag}</Badge>)}
+      {event.data.isFeatured && <Badge variant="primary">Destacado</Badge>}
+    </div>
+    <h1
+      id="event-heading"
+      class="font-display text-3xl sm:text-4xl text-text leading-tight mb-3"
+    >
+      {event.data.title}
+    </h1>
+    <div class="text-text-muted text-sm mb-10 flex flex-col gap-1">
+      <span>
+        {formatDate(event.data.startDate)}
+        {event.data.endDate ? ` — ${formatDate(event.data.endDate)}` : ''}
+      </span>
+      {event.data.location && <span>{event.data.location}</span>}
+      {event.data.address && <span>{event.data.address}</span>}
+    </div>
+    <div class="post-body">
+      <Content />
+    </div>
+  </Section>
+</PageLayout>

@@ -1,10 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Section from '@/components/ui/Section.astro';
-import Button from '@/components/ui/Button.astro';
 import Badge from '@/components/ui/Badge.astro';
 import Card from '@/components/ui/Card.astro';
-import { SITE, SOCIAL, resolveSeo, buildCanonical } from '@/config';
+import { SITE, resolveSeo, buildCanonical } from '@/config';
+import { formatDate } from '@/lib';
 
 const seo = resolveSeo({
   title: 'Recursos',
@@ -13,8 +14,8 @@ const seo = resolveSeo({
   canonical: buildCanonical('/recursos'),
 });
 
-const instagramUrl = SOCIAL.instagram;
-const youtubeUrl = SOCIAL.youtube;
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 ---
 
 <PageLayout seo={seo}>
@@ -32,41 +33,35 @@ const youtubeUrl = SOCIAL.youtube;
         Recursos
       </h1>
       <p class="text-lg text-text-muted leading-relaxed">
-        Un espacio en construcción con tutoriales, guías y materiales para mujeres
-        que crean. Tejido, macramé, crochet y todo lo que necesitás para seguir
-        creciendo a tu ritmo.
+        Tutoriales, guías y materiales para mujeres que crean. Tejido, macramé,
+        crochet y todo lo que necesitás para seguir creciendo a tu ritmo.
       </p>
     </div>
   </Section>
 
-  <!-- PLACEHOLDER — próximo contenido -->
-  <Section id="recursos-contenido" spacing="xl" background="alt" labelledBy="recursos-pronto-heading">
-    <!-- Reemplazar por posts.map((post) => <Card href={...}>...</Card>) cuando existan entradas en src/content/blog/ -->
-    <Card>
-      <div class="flex flex-col gap-4">
-        <Badge variant="primary">Próximamente</Badge>
-        <h2 id="recursos-pronto-heading" class="font-display font-bold text-2xl text-text">
-          Estamos preparando el contenido
-        </h2>
-        <p class="text-text-muted leading-relaxed">
-          Estamos preparando tutoriales, artículos y recursos para vos.
-          Mientras tanto, seguinos en redes para no perderte nada:
-          cada semana compartimos tips, ideas y el proceso detrás de cada proyecto.
-        </p>
-        <div class="flex flex-wrap gap-3 pt-2">
-          {instagramUrl ? (
-            <Button href={instagramUrl} target="_blank" size="md">
-              Seguinos en Instagram
-            </Button>
-          ) : null}
-          {youtubeUrl ? (
-            <Button href={youtubeUrl} target="_blank" variant="outline" size="md">
-              Canal de YouTube
-            </Button>
-          ) : null}
-        </div>
-      </div>
-    </Card>
+  <!-- ARTÍCULOS -->
+  <Section id="recursos-articulos" spacing="xl" background="alt" labelledBy="recursos-articulos-heading">
+    <h2 id="recursos-articulos-heading" class="font-display text-3xl sm:text-4xl text-text mb-8">
+      Artículos
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map((post) => (
+        <Card href={`/recursos/${post.slug}`}>
+          <div class="flex flex-col gap-3 h-full">
+            <div class="flex flex-wrap gap-2">
+              {post.data.tags.map((tag) => <Badge variant="default">{tag}</Badge>)}
+            </div>
+            <h3 class="font-display font-bold text-lg text-text leading-snug">
+              {post.data.title}
+            </h3>
+            <p class="text-text-muted text-sm leading-relaxed flex-1">
+              {post.data.description}
+            </p>
+            <p class="text-text-subtle text-xs mt-2">{formatDate(post.data.publishedAt)}</p>
+          </div>
+        </Card>
+      ))}
+    </div>
   </Section>
 
 </PageLayout>
