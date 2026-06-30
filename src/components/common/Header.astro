@@ -150,5 +150,27 @@ const isActive = (href: string): boolean => currentPath === href;
         mobileNav.open = false;
       });
     });
+
+    // Focus trap — mantiene el foco dentro del panel mientras el menú está abierto
+    const panel = document.getElementById('mobile-nav-panel');
+    let _trap: ((e: KeyboardEvent) => void) | null = null;
+    mobileNav.addEventListener('toggle', () => {
+      if (mobileNav.open) {
+        const els = [...(panel?.querySelectorAll<HTMLElement>('a[href]') ?? [])];
+        _trap = (e: KeyboardEvent) => {
+          if (e.key !== 'Tab' || !els.length) return;
+          const first = els[0]!, last = els[els.length - 1]!;
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault(); summaryBtn.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault(); first.focus();
+          }
+        };
+        mobileNav.addEventListener('keydown', _trap);
+      } else if (_trap) {
+        mobileNav.removeEventListener('keydown', _trap);
+        _trap = null;
+      }
+    });
   }
 </script>
