@@ -8,6 +8,9 @@ interface Props {
 }
 
 const { currentPath } = Astro.props as Props;
+
+// Helper centralizado — un único lugar para cambiar la lógica de ruta activa
+const isActive = (href: string): boolean => currentPath === href;
 ---
 
 <header
@@ -29,29 +32,34 @@ const { currentPath } = Astro.props as Props;
     <!-- Desktop nav (md+) -->
     <nav aria-label="Navegación principal" class="hidden md:flex items-center">
       <ul class="flex items-center gap-1">
-        {NAV_MAIN.map((item) => {
-          const isActive = currentPath === item.href;
-          return (
-            <li>
-              <a
-                href={item.href}
-                aria-current={isActive ? ('page' as const) : undefined}
-                class={cn(
-                  'px-3 py-2 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
-                  isActive
-                    ? 'text-primary bg-primary/10 font-semibold'
-                    : 'text-text-muted hover:text-text hover:bg-surface-alt'
-                )}
-              >
-                {item.label}
-              </a>
-            </li>
-          );
-        })}
+        {NAV_MAIN.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? ('page' as const) : undefined}
+              class={cn(
+                'px-3 py-2 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                isActive(item.href)
+                  ? 'text-primary bg-primary/10 font-semibold'
+                  : 'text-text-muted hover:text-text hover:bg-surface-alt'
+              )}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
 
-    <!-- Mobile menu (details/summary — CSS toggle + minimal JS for UX) -->
+    <!-- CTA opcional (desktop md+) — pasar contenido con slot="cta" desde PageLayout o páginas -->
+    <!-- CTA mobile: agregar dentro del panel mobile en Etapa 4 si se requiere -->
+    {Astro.slots.has('cta') && (
+      <div class="hidden md:flex items-center">
+        <slot name="cta" />
+      </div>
+    )}
+
+    <!-- Mobile menu (details/summary — CSS toggle + minimal JS para UX y foco) -->
     <details class="md:hidden relative" id="mobile-nav-details">
       <summary
         class="flex items-center justify-center w-10 h-10 rounded-lg text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer list-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -72,25 +80,22 @@ const { currentPath } = Astro.props as Props;
       >
         <nav aria-label="Menú de navegación móvil">
           <ul class="flex flex-col gap-0.5">
-            {NAV_MAIN.map((item) => {
-              const isActive = currentPath === item.href;
-              return (
-                <li>
-                  <a
-                    href={item.href}
-                    aria-current={isActive ? ('page' as const) : undefined}
-                    class={cn(
-                      'block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                      isActive
-                        ? 'text-primary bg-primary/10 font-semibold'
-                        : 'text-text-muted hover:text-text hover:bg-surface-alt'
-                    )}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })}
+            {NAV_MAIN.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item.href) ? ('page' as const) : undefined}
+                  class={cn(
+                    'block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                    isActive(item.href)
+                      ? 'text-primary bg-primary/10 font-semibold'
+                      : 'text-text-muted hover:text-text hover:bg-surface-alt'
+                  )}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
@@ -111,19 +116,39 @@ const { currentPath } = Astro.props as Props;
 </style>
 
 <script>
-  // Add scroll shadow
   const header = document.getElementById('site-header');
+  const mobileNav = document.getElementById('mobile-nav-details') as HTMLDetailsElement | null;
+  const summaryBtn = mobileNav?.querySelector('summary') as HTMLElement | null;
+
+  // Scroll shadow
   if (header) {
     window.addEventListener('scroll', () => {
       header.classList.toggle('shadow-card', window.scrollY > 4);
     }, { passive: true });
   }
 
-  // Close mobile menu when a nav link is clicked
-  document.querySelectorAll('#mobile-nav-panel a').forEach((link) => {
-    link.addEventListener('click', () => {
-      const details = document.getElementById('mobile-nav-details') as HTMLDetailsElement | null;
-      if (details) details.open = false;
+  if (mobileNav && summaryBtn) {
+    // Escape cierra el menú y restaura el foco al botón hamburguesa
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && mobileNav.open) {
+        mobileNav.open = false;
+        summaryBtn.focus();
+      }
     });
-  });
+
+    // Clic fuera del menú: cierra y restaura foco
+    document.addEventListener('click', (e: MouseEvent) => {
+      if (mobileNav.open && e.target instanceof Node && !mobileNav.contains(e.target)) {
+        mobileNav.open = false;
+        summaryBtn.focus();
+      }
+    });
+
+    // Links del panel: cierran el menú (sin restaurar foco — la navegación lo gestiona)
+    mobileNav.querySelectorAll('#mobile-nav-panel a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileNav.open = false;
+      });
+    });
+  }
 </script>
