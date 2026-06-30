@@ -1,0 +1,62 @@
+---
+import { SITE, NAV_FOOTER, NAV_LEGAL, SOCIAL } from '@/config';
+---
+
+<footer role="contentinfo" id="site-footer">
+  <div>
+    <p>{SITE.name} &mdash; {SITE.tagline}</p>
+    <nav aria-label="Navegación del pie de página">
+      <ul>
+        {NAV_FOOTER.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <nav aria-label="Navegación legal">
+      <ul>
+        {NAV_LEGAL.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <nav aria-label="Redes sociales de Inspira Mujer">
+      <ul>
+        {
+          SOCIAL.instagram && (
+            <li>
+              <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                Instagram
+              </a>
+            </li>
+          )
+        }
+        {
+          SOCIAL.youtube && (
+            <li>
+              <a href={SOCIAL.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                YouTube
+              </a>
+            </li>
+          )
+        }
+        {
+          SOCIAL.facebook && (
+            <li>
+              <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                Facebook
+              </a>
+            </li>
+          )
+        }
+        {
+          SOCIAL.tiktok && (
+            <li>
+              <a href={SOCIAL.tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                TikTok
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
+    <p>
+      &copy; {new Date().getFullYear()} {SITE.name}. Todos los derechos reservados.
+    </p>
+  </div>
+</footer>

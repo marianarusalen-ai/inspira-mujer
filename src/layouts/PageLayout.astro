@@ -1,7 +1,8 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import Header from '@/components/common/Header.astro';
+import Footer from '@/components/common/Footer.astro';
 import type { SeoProps } from '@/types';
-import { SITE, NAV_MAIN, NAV_FOOTER, NAV_LEGAL, SOCIAL } from '@/config';
 
 interface Props {
   seo: SeoProps;
@@ -13,107 +14,9 @@ const currentPath = Astro.url.pathname;
 
 <BaseLayout seo={seo}>
   <slot name="head" slot="head" />
-
-  <header role="banner" id="site-header">
-    <nav aria-label="Navegación principal">
-      <a href="/" aria-label={`${SITE.name} — Inicio`}>
-        <span>{SITE.name}</span>
-      </a>
-      <ul>
-        {
-          NAV_MAIN.map((item) => (
-            <li>
-              <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-  </header>
-
+  <Header currentPath={currentPath} />
   <main id="main-content" tabindex="-1">
     <slot />
   </main>
-
-  <footer role="contentinfo" id="site-footer">
-    <div>
-      <p>{SITE.name} &mdash; {SITE.tagline}</p>
-      <nav aria-label="Navegación del pie de página">
-        <ul>
-          {NAV_FOOTER.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
-        </ul>
-      </nav>
-      <nav aria-label="Navegación legal">
-        <ul>
-          {NAV_LEGAL.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
-        </ul>
-      </nav>
-      <nav aria-label="Redes sociales de Inspira Mujer">
-        <ul>
-          {
-            SOCIAL.instagram && (
-              <li>
-                <a
-                  href={SOCIAL.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                >
-                  Instagram
-                </a>
-              </li>
-            )
-          }
-          {
-            SOCIAL.youtube && (
-              <li>
-                <a
-                  href={SOCIAL.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="YouTube"
-                >
-                  YouTube
-                </a>
-              </li>
-            )
-          }
-          {
-            SOCIAL.facebook && (
-              <li>
-                <a
-                  href={SOCIAL.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                >
-                  Facebook
-                </a>
-              </li>
-            )
-          }
-          {
-            SOCIAL.tiktok && (
-              <li>
-                <a
-                  href={SOCIAL.tiktok}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="TikTok"
-                >
-                  TikTok
-                </a>
-              </li>
-            )
-          }
-        </ul>
-      </nav>
-      <p>
-        &copy; {new Date().getFullYear()}
-        {SITE.name}. Todos los derechos reservados.
-      </p>
-    </div>
-  </footer>
+  <Footer />
 </BaseLayout>

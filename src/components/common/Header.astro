@@ -1,0 +1,28 @@
+---
+import { SITE, NAV_MAIN } from '@/config';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+---
+
+<header role="banner" id="site-header">
+  <nav aria-label="Navegación principal">
+    <a href="/" aria-label={`${SITE.name} — Inicio`}>
+      <span>{SITE.name}</span>
+    </a>
+    <ul>
+      {
+        NAV_MAIN.map((item) => (
+          <li>
+            <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
