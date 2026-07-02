@@ -5,6 +5,7 @@ export const SOCIAL: SocialLinks = {
   youtube: 'https://www.youtube.com/@inspiramujerok',
   facebook: 'https://www.facebook.com/profile.php?id=100063561141828',
   whatsapp: 'https://wa.me/5492984589217',
+  store: 'https://inspiradeco3.mitiendanube.com',
   email: 'marianarusalen@gmail.com',
 };
 

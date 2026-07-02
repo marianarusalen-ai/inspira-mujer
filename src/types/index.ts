@@ -23,6 +23,7 @@ export interface SocialLinks {
   youtube?: string;
   facebook?: string;
   whatsapp?: string;
+  store?: string;
   twitter?: string;
   linkedin?: string;
   email?: string;

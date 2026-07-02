@@ -4,13 +4,14 @@ import Icon from '@/components/ui/Icon.astro';
 import Button from '@/components/ui/Button.astro';
 import { interpolate } from '@/i18n/utils';
 
-type SocialEntry = { icon: string; label: string; url: string };
+type SocialEntry = { icon: string; label: string; url: string; ariaLabel?: string };
 
-const allPlatforms: { icon: string; label: string; url: string | undefined }[] = [
+const allPlatforms: { icon: string; label: string; url: string | undefined; ariaLabel?: string }[] = [
   { icon: 'instagram', label: 'Instagram', url: SOCIAL.instagram },
   { icon: 'youtube',   label: 'YouTube',   url: SOCIAL.youtube   },
   { icon: 'external-link', label: 'Facebook', url: SOCIAL.facebook },
   { icon: 'external-link', label: 'WhatsApp', url: SOCIAL.whatsapp },
+  { icon: 'external-link', label: 'Tienda Online', url: SOCIAL.store, ariaLabel: 'Visitar la tienda online de Inspira Mujer' },
 ];
 
 const socialPlatforms: SocialEntry[] = allPlatforms.filter(
@@ -66,13 +67,13 @@ const socialPlatforms: SocialEntry[] = allPlatforms.filter(
         </h2>
         <nav aria-label="Redes sociales de Inspira Mujer">
           <ul class="flex flex-col gap-2">
-            {socialPlatforms.map(({ icon, label, url }) => (
+            {socialPlatforms.map(({ icon, label, url, ariaLabel }) => (
               <li>
                 <a
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={interpolate('Seguinos en {{platform}}', { platform: label })}
+                  aria-label={ariaLabel ?? interpolate('Seguinos en {{platform}}', { platform: label })}
                   class="inline-flex items-center gap-2 text-sm text-text-inverse/70 hover:text-text-inverse transition-colors focus-visible:outline-none focus-visible:underline"
                 >
                   <Icon name={icon} size="sm" />
