@@ -19,7 +19,7 @@ export function resolveSeo(props: Partial<SeoProps>): SeoProps {
     ogType: props.ogType ?? 'website',
     noIndex: props.noIndex ?? false,
   };
-  if (props.ogImage !== undefined) resolved.ogImage = props.ogImage;
+  resolved.ogImage = `${SITE.url}${props.ogImage ?? SITE.defaultOgImage}`;
   if (props.ogImageAlt !== undefined) resolved.ogImageAlt = props.ogImageAlt;
   return resolved;
 }

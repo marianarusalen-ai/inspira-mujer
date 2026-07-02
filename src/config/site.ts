@@ -3,6 +3,7 @@ export const SITE = {
   tagline: 'Comunidad de mujeres que crean, tejen y se inspiran',
   url: 'https://inspiramujer.com.ar',
   logo: '/icons/logo-color.png',
+  defaultOgImage: '/images/og-default.jpg',
   locale: 'es-AR',
   language: 'es',
   timezone: 'America/Argentina/Buenos_Aires',
