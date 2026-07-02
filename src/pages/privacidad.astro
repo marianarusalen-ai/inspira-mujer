@@ -1,0 +1,75 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/ui/Section.astro';
+import { SITE, CONTACT, resolveSeo, buildCanonical } from '@/config';
+
+const seo = resolveSeo({
+  title: 'Política de Privacidad',
+  description: `Cómo ${SITE.name} trata la información de quienes visitan y se contactan a través de este sitio.`,
+  canonical: buildCanonical('/privacidad'),
+});
+---
+
+<PageLayout seo={seo}>
+
+  <Section id="privacidad-content" spacing="xl" width="prose" labelledBy="privacidad-heading">
+    <h1
+      id="privacidad-heading"
+      class="font-display text-3xl sm:text-4xl text-text leading-tight mb-3"
+    >
+      Política de Privacidad
+    </h1>
+    <p class="text-text-muted text-sm mb-10">Última actualización: julio de 2026</p>
+
+    <div class="post-body">
+      <h2>Responsable</h2>
+      <p>
+        Este sitio (<a href={SITE.url}>{SITE.url}</a>) es operado por {SITE.name},
+        un espacio de comunidad con sede en {SITE.location}. Para cualquier consulta
+        sobre esta política, podés escribirnos a
+        <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
+      </p>
+
+      <h2>Qué información recopilamos</h2>
+      <p>
+        Este es un sitio estático: no usamos cookies propias ni almacenamos datos
+        personales en un servidor. El formulario de contacto y la suscripción al
+        newsletter que aparecen en el sitio están actualmente deshabilitados y no
+        envían ni recopilan información todavía. Cuando se habiliten, esta política
+        se actualizará para detallar qué datos se piden (por ejemplo, nombre y correo
+        electrónico), con qué finalidad se usan y qué proveedor los procesa. Tampoco
+        usamos actualmente herramientas de medición o analítica. Si en el futuro
+        incorporamos Google Analytics u otra herramienta similar, vamos a actualizar
+        esta política para explicar qué datos de navegación se recopilan y con qué fin.
+      </p>
+
+      <h2>Enlaces a redes sociales</h2>
+      <p>
+        El sitio enlaza a nuestras cuentas de Instagram, YouTube, Facebook y TikTok.
+        Cada una de esas plataformas tiene su propia política de privacidad, que rige
+        la información que compartas ahí. Te recomendamos revisarlas si interactuás
+        con nosotros a través de esos canales.
+      </p>
+
+      <h2>Tus derechos</h2>
+      <p>
+        De acuerdo con la Ley 25.326 de Protección de Datos Personales de la
+        República Argentina, tenés derecho a acceder, rectificar, actualizar o
+        solicitar la eliminación de cualquier dato personal que en el futuro nos
+        hayas proporcionado. La Agencia de Acceso a la Información Pública, en su
+        carácter de Órgano de Control de la Ley 25.326, tiene la atribución de
+        atender denuncias y reclamos que se interpongan en relación al incumplimiento
+        de las normas sobre protección de datos personales.
+      </p>
+
+      <h2>Cambios en esta política</h2>
+      <p>
+        Podemos actualizar esta política a medida que el sitio incorpore nuevas
+        funcionalidades (como el formulario de contacto o el newsletter). Vamos a
+        indicar la fecha de la última actualización en la parte superior de esta
+        página.
+      </p>
+    </div>
+  </Section>
+
+</PageLayout>

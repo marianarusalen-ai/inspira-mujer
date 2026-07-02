@@ -4,6 +4,7 @@ import Section from '@/components/ui/Section.astro';
 import Button from '@/components/ui/Button.astro';
 import Badge from '@/components/ui/Badge.astro';
 import Card from '@/components/ui/Card.astro';
+import TeamCard from '@/components/ui/TeamCard.astro';
 import { SITE, resolveSeo, buildCanonical } from '@/config';
 import { FEATURED_TEAM } from '@/data';
 
@@ -84,23 +85,7 @@ const seo = resolveSeo({
       y motivador para mujeres que crean.
     </p>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {FEATURED_TEAM.map((member) => (
-        <Card>
-          <div slot="image" class="flex justify-center pt-8 pb-4 bg-surface-alt">
-            <div
-              class="w-20 h-20 rounded-full bg-gradient-to-br from-primary/30 to-secondary/20"
-              aria-hidden="true"
-            ></div>
-          </div>
-          <div class="flex flex-col gap-2">
-            <h3 class="font-display font-bold text-lg text-text">{member.name}</h3>
-            <p class="text-link text-sm font-semibold">{member.role}</p>
-            {member.bio ? (
-              <p class="text-text-muted text-sm leading-relaxed">{member.bio}</p>
-            ) : null}
-          </div>
-        </Card>
-      ))}
+      {FEATURED_TEAM.map((member) => <TeamCard member={member} />)}
     </div>
   </Section>
 

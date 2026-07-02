@@ -58,6 +58,7 @@ src/
 | [docs/architecture.mmd](docs/architecture.mmd) | Diagrama de arquitectura en formato Mermaid |
 | [docs/TREE.md](docs/TREE.md) | Snapshot de la estructura de carpetas del proyecto |
 | [docs/CHANGELOG.md](docs/CHANGELOG.md) | Historial de cambios por etapa (Keep a Changelog) |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Estado actual, deuda técnica y próximas etapas |
 
 ## Agregar una página
 

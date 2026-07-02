@@ -1,0 +1,80 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/ui/Section.astro';
+import { SITE, CONTACT, resolveSeo, buildCanonical } from '@/config';
+
+const seo = resolveSeo({
+  title: 'Términos de Uso',
+  description: `Condiciones de uso del sitio web de ${SITE.name}.`,
+  canonical: buildCanonical('/terminos'),
+});
+---
+
+<PageLayout seo={seo}>
+
+  <Section id="terminos-content" spacing="xl" width="prose" labelledBy="terminos-heading">
+    <h1
+      id="terminos-heading"
+      class="font-display text-3xl sm:text-4xl text-text leading-tight mb-3"
+    >
+      Términos de Uso
+    </h1>
+    <p class="text-text-muted text-sm mb-10">Última actualización: julio de 2026</p>
+
+    <div class="post-body">
+      <h2>Aceptación de los términos</h2>
+      <p>
+        Al navegar el sitio <a href={SITE.url}>{SITE.url}</a>, operado por
+        {SITE.name} desde {SITE.location}, aceptás las condiciones descritas en
+        esta página. Si no estás de acuerdo, te pedimos que no continúes usando
+        el sitio.
+      </p>
+
+      <h2>Uso del contenido</h2>
+      <p>
+        Los textos, imágenes, logo y demás contenido publicados en este sitio
+        pertenecen a {SITE.name} o se usan con la autorización correspondiente.
+        Podés compartir enlaces a nuestras páginas y citar fragmentos con
+        atribución, pero no está permitido reproducir el contenido completo con
+        fines comerciales sin nuestro consentimiento previo.
+      </p>
+
+      <h2>Enlaces a sitios externos</h2>
+      <p>
+        Este sitio incluye enlaces a plataformas de terceros (Instagram, YouTube,
+        Facebook, TikTok, entre otras). No somos responsables por el contenido,
+        las políticas ni las prácticas de esos sitios externos.
+      </p>
+
+      <h2>Disponibilidad del sitio</h2>
+      <p>
+        Hacemos lo posible para que el sitio esté disponible y funcione
+        correctamente, pero no garantizamos que esté libre de interrupciones o
+        errores. Podemos modificar, suspender o discontinuar cualquier parte del
+        sitio en cualquier momento, sin aviso previo.
+      </p>
+
+      <h2>Limitación de responsabilidad</h2>
+      <p>
+        La información publicada en este sitio tiene fines informativos y
+        comunitarios. {SITE.name} no se responsabiliza por decisiones tomadas a
+        partir del contenido publicado, ni por daños derivados del uso del sitio.
+      </p>
+
+      <h2>Modificaciones</h2>
+      <p>
+        Podemos actualizar estos términos cuando el sitio incorpore nuevas
+        funcionalidades. La fecha de la última actualización figura en la parte
+        superior de esta página.
+      </p>
+
+      <h2>Ley aplicable</h2>
+      <p>
+        Estos términos se rigen por las leyes de la República Argentina. Ante
+        cualquier consulta, podés escribirnos a
+        <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
+      </p>
+    </div>
+  </Section>
+
+</PageLayout>

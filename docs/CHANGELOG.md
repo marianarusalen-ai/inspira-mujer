@@ -6,6 +6,91 @@ Versionado semántico: [SemVer](https://semver.org/).
 
 ---
 
+## [1.0.0] — 2026-07-02
+
+Cierre del sitio institucional. Listo para producción (pendiente de conectar
+el remote de GitHub — ver `docs/ROADMAP.md`).
+
+### Agregado
+- `/privacidad` y `/terminos` — páginas reales (Política de Privacidad,
+  Términos de Uso) con contenido propio para una organización argentina;
+  resuelven los links del footer que antes apuntaban a rutas inexistentes
+- `TeamCard.astro` — componente `ui/` que reemplaza el bloque de tarjeta de
+  equipo duplicado entre `index.astro` y `programa.astro`
+- Paso `Lint` en `deploy.yml`, entre `check` y `build`
+
+### Modificado
+- Formulario de `/contacto` y newsletter del footer: deshabilitados
+  visualmente (`disabled` + texto "Muy pronto") hasta definir el proveedor
+  de envío real (n8n, Resend, u otro) en una etapa futura
+- `deploy.yml` — `node-version` alineado a 22 (coincide con
+  `engines.node` de `package.json`, antes apuntaba a 20)
+- Rama principal renombrada de `master` a `main` (coincide con el trigger
+  `branches: [main]` de `deploy.yml`, que nunca se hubiera disparado)
+- `favicon.png` — recortado al isotipo (antes era el lockup completo con
+  wordmark a 2174×2648 px, ilegible a tamaño de pestaña); ahora 256×256 px,
+  16 KB (antes 61.9 KB)
+
+### Eliminado
+- `public/favicon.ico` y `public/favicon.svg` — archivos huérfanos, sin
+  ninguna referencia en el código (`BaseLayout` solo usa `/icons/favicon.png`)
+- `src/components/ui/Tag.astro` — componente sin ningún uso en el proyecto
+
+---
+
+## [0.12.0] — 2026-07-01
+
+### Agregado
+- JSON-LD `BlogPosting` (posts de `/recursos/[slug]`) y `Event`
+  (`/eventos/[slug]`) inyectados vía el slot `head` de `PageLayout`
+- `apple-touch-icon.png` (180×180) enlazado en `BaseLayout`
+
+### Verificado
+- Auditoría Lighthouse real (Home y un post): 100 Performance / 96
+  Accessibility / 100 Best Practices / 100 SEO. Core Web Vitals en rango
+  "Good" (LCP 1.7s, CLS 0, TBT ≤60ms)
+- Sitemap y `robots.txt` coherentes con las páginas reales generadas
+
+## [0.11.0] — 2026-07-01
+
+### Agregado
+- `SITE.defaultOgImage` + `og-default.jpg` (1200×630) — Open Graph e imagen
+  por defecto en todas las páginas, resuelto como URL absoluta en `resolveSeo()`
+
+## [0.10.0] — 2026-06-30
+
+### Agregado
+- Content Layer real: 3 posts en `src/content/blog/`, 1 evento real
+  (Expo Inspira Teje, jul 2026) en `src/content/eventos/`
+- Rutas de detalle `/recursos/[slug]` y `/eventos/[slug]`
+- Estilos `.post-body` para contenido renderizado desde Markdown
+
+## [0.9.0] — 2026-06-30
+
+### Agregado
+- Logo real en el header (`SITE.logo`, `logo-color.png`), favicon activo
+- JSON-LD Organization actualizado con el logo real
+
+## [0.8.0] — 2026-06-30
+
+### Corregido
+- Contraste WCAG AA del skip link
+- Focus trap en el menú mobile
+- Eliminado `src/pages/dev/ui-kit.astro` (catálogo de desarrollo, ya no necesario)
+
+## [0.7.0] — 2026-06-30
+
+### Agregado
+- ADR-007 implementado: token `--color-link` (#c4317d) separado de
+  `--color-primary`, para no comprometer el contraste de texto/links con el
+  color de marca. 10 combinaciones verificadas WCAG AA
+
+## [0.6.0] — 2026-06-30
+
+### Agregado
+- Home completa con fix de contraste WCAG AA en `Button` variantes `primary`
+  y `outline`
+
 ## [0.5.0] — 2026-06-30
 
 ### Agregado

@@ -46,8 +46,11 @@ const instagramUrl = SOCIAL.instagram;
         <h2 id="form-heading" class="font-display text-2xl text-text mb-6">
           Envianos un mensaje
         </h2>
-        <!-- Formulario UI placeholder — integración con automationService.triggerContact()
-             y conexión a n8n pendiente para Etapa 11 (automatizaciones) -->
+        <p class="text-sm text-text-muted mb-5 p-3 rounded-lg bg-surface border border-border">
+          Este formulario todavía no está activo. Mientras lo habilitamos,
+          escribinos directamente por correo o Instagram (ver información de contacto).
+        </p>
+        <!-- Envío real pendiente: depende de elegir proveedor (n8n, Resend, u otro) en una etapa futura -->
         <form
           aria-labelledby="form-heading"
           class="flex flex-col gap-5"
@@ -59,6 +62,7 @@ const instagramUrl = SOCIAL.instagram;
             placeholder="Tu nombre"
             required
             autocomplete="name"
+            disabled
           />
           <Input
             id="email"
@@ -68,6 +72,7 @@ const instagramUrl = SOCIAL.instagram;
             placeholder="tu@email.com"
             required
             autocomplete="email"
+            disabled
           />
           <Textarea
             id="mensaje"
@@ -76,9 +81,10 @@ const instagramUrl = SOCIAL.instagram;
             placeholder="¿En qué te podemos ayudar?"
             required
             rows={6}
+            disabled
           />
           <div class="pt-1">
-            <Button type="submit" size="lg">Enviar mensaje</Button>
+            <Button type="submit" size="lg" disabled>Muy pronto</Button>
           </div>
         </form>
       </div>
