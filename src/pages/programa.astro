@@ -6,12 +6,12 @@ import Badge from '@/components/ui/Badge.astro';
 import Card from '@/components/ui/Card.astro';
 import TeamCard from '@/components/ui/TeamCard.astro';
 import { SITE, resolveSeo, buildCanonical } from '@/config';
-import { FEATURED_TEAM } from '@/data';
+import { QUIENES_SOMOS_TEAM } from '@/data';
 
 const seo = resolveSeo({
   title: 'El Programa',
   description:
-    'Conocé Inspira Mujer Live: conversaciones, entrevistas y reflexiones para mujeres que crean, todos los martes a las 20:00 hs (ARG).',
+    'Conocé Inspira Mujer Live: conversaciones, entrevistas y reflexiones para mujeres que crean, todos los sábados a las 17:00 hs (ARG).',
   canonical: buildCanonical('/programa'),
 });
 ---
@@ -84,8 +84,8 @@ const seo = resolveSeo({
       Cada semana Mariana, Irene y Eli crean un espacio cálido, honesto
       y motivador para mujeres que crean.
     </p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {FEATURED_TEAM.map((member) => <TeamCard member={member} />)}
+    <div class="max-w-xs mx-auto">
+      {QUIENES_SOMOS_TEAM.map((member) => <TeamCard member={member} />)}
     </div>
   </Section>
 

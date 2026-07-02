@@ -1,1 +1,1 @@
-export { TEAM, FEATURED_TEAM } from './team';
+export { TEAM, FEATURED_TEAM, QUIENES_SOMOS_TEAM } from './team';

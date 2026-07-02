@@ -16,10 +16,10 @@ const seo = resolveSeo({
 type SocialLink = { icon: string; label: string; handle: string; url: string };
 
 const socialLinks: SocialLink[] = ([
-  { icon: 'instagram', label: 'Instagram', handle: '@inspiramujer', url: SOCIAL.instagram },
-  { icon: 'youtube',   label: 'YouTube',   handle: '@inspiramujer', url: SOCIAL.youtube   },
-  { icon: 'external-link', label: 'Facebook', handle: '/inspiramujer', url: SOCIAL.facebook },
-  { icon: 'external-link', label: 'TikTok',   handle: '@inspiramujer', url: SOCIAL.tiktok   },
+  { icon: 'instagram', label: 'Instagram', handle: '@inspiramujerok', url: SOCIAL.instagram },
+  { icon: 'youtube',   label: 'YouTube',   handle: '@inspiramujerok', url: SOCIAL.youtube   },
+  { icon: 'external-link', label: 'Facebook', handle: 'Inspira Mujer', url: SOCIAL.facebook },
+  { icon: 'external-link', label: 'WhatsApp', handle: '+54 9 2984 589217', url: SOCIAL.whatsapp },
 ] as { icon: string; label: string; handle: string; url: string | undefined }[]).filter(
   (s): s is SocialLink => s.url !== undefined
 );

@@ -22,7 +22,7 @@ export interface SocialLinks {
   instagram?: string;
   youtube?: string;
   facebook?: string;
-  tiktok?: string;
+  whatsapp?: string;
   twitter?: string;
   linkedin?: string;
   email?: string;

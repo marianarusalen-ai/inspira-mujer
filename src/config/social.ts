@@ -1,11 +1,11 @@
 import type { SocialLinks } from '@/types';
 
 export const SOCIAL: SocialLinks = {
-  instagram: 'https://www.instagram.com/inspiramujer',
-  youtube: 'https://www.youtube.com/@inspiramujer',
-  facebook: 'https://www.facebook.com/inspiramujer',
-  tiktok: 'https://www.tiktok.com/@inspiramujer',
-  email: 'hola@inspiramujer.com.ar',
+  instagram: 'https://www.instagram.com/inspiramujerok/',
+  youtube: 'https://www.youtube.com/@inspiramujerok',
+  facebook: 'https://www.facebook.com/profile.php?id=100063561141828',
+  whatsapp: 'https://wa.me/5492984589217',
+  email: 'marianarusalen@gmail.com',
 };
 
 export const TWITTER_HANDLE = '@inspiramujer';
