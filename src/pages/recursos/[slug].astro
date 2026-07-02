@@ -5,7 +5,7 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import Section from '@/components/ui/Section.astro';
 import Badge from '@/components/ui/Badge.astro';
 import Button from '@/components/ui/Button.astro';
-import { resolveSeo, buildCanonical } from '@/config';
+import { SITE, resolveSeo, buildCanonical } from '@/config';
 import { formatDate } from '@/lib';
 
 export async function getStaticPaths() {
@@ -28,9 +28,25 @@ const seo = resolveSeo({
   description: post.data.description,
   canonical: buildCanonical(`/recursos/${post.slug}`),
 });
+
+const jsonLdBlogPosting = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishedAt.toISOString(),
+  ...(post.data.updatedAt && { dateModified: post.data.updatedAt.toISOString() }),
+  author: {
+    '@type': 'Person',
+    name: post.data.author,
+  },
+  image: `${SITE.url}${post.data.image ?? SITE.defaultOgImage}`,
+  url: seo.canonical,
+};
 ---
 
 <PageLayout seo={seo}>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(jsonLdBlogPosting)} />
   <Section id="post-content" spacing="xl" width="prose" labelledBy="post-heading">
     <nav aria-label="Ruta de navegación" class="mb-8">
       <Button href="/recursos" variant="ghost" size="sm">← Recursos</Button>

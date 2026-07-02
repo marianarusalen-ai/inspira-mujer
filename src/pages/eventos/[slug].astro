@@ -5,7 +5,7 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import Section from '@/components/ui/Section.astro';
 import Badge from '@/components/ui/Badge.astro';
 import Button from '@/components/ui/Button.astro';
-import { resolveSeo, buildCanonical } from '@/config';
+import { SITE, resolveSeo, buildCanonical } from '@/config';
 import { formatDate } from '@/lib';
 
 export async function getStaticPaths() {
@@ -28,9 +28,32 @@ const seo = resolveSeo({
   description: event.data.description,
   canonical: buildCanonical(`/eventos/${event.slug}`),
 });
+
+const jsonLdEvent = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: event.data.title,
+  description: event.data.description,
+  startDate: event.data.startDate.toISOString(),
+  ...(event.data.endDate && { endDate: event.data.endDate.toISOString() }),
+  eventAttendanceMode: event.data.isOnline
+    ? 'https://schema.org/OnlineEventAttendanceMode'
+    : 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: event.data.isOnline
+    ? { '@type': 'VirtualLocation', url: event.data.streamUrl ?? seo.canonical }
+    : {
+        '@type': 'Place',
+        name: event.data.location ?? SITE.name,
+        address: event.data.address ?? event.data.location ?? SITE.location,
+      },
+  image: `${SITE.url}${event.data.image ?? SITE.defaultOgImage}`,
+  url: seo.canonical,
+};
 ---
 
 <PageLayout seo={seo}>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(jsonLdEvent)} />
   <Section id="event-content" spacing="xl" width="prose" labelledBy="event-heading">
     <nav aria-label="Ruta de navegación" class="mb-8">
       <Button href="/eventos" variant="ghost" size="sm">← Eventos</Button>
