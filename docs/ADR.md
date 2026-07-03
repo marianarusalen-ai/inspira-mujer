@@ -194,3 +194,54 @@ Valores finales calculados (mismo hue 329°, saturación 60%, ajustando lightnes
 - `--color-primary` queda reservado exclusivamente para uso decorativo/superficie. No debe usarse directamente en texto legible.
 - `--color-link` es el color canónico para texto interactivo. Nuevos links, eyebrow labels y roles de texto de marca deben usar `text-link`.
 - Limitación conocida: en secciones con `background="dark"` (`bg-surface-dark` #1a1014), un `<a>` inline heredaría `color: var(--color-link)` (#c4317d) con contraste ~4.0:1 sobre el fondo oscuro — por debajo de WCAG AA. Mitigación: en secciones oscuras, los links inline deben sobreescribirse con `text-text-inverse underline` o evitarse; los CTAs ya usan `Button` que maneja esto correctamente.
+
+---
+
+## ADR-008 — Logo del Hero cortado en Chrome/Android real: mitigación sin causa raíz confirmada
+
+**Estado:** Aceptado — Mitigado (verificado en dispositivo real). Causa raíz **no confirmada con certeza técnica**.
+**Fecha:** 2026-07-03
+
+### Contexto
+Tras la Etapa 16 (logo del Hero agrandado en `src/pages/index.astro`), una usuaria reportó en su Samsung Galaxy S24 (Chrome/Android) que el logo circular aparecía cortado/desbordado en la parte inferior de la pantalla, superpuesto a la zona de la barra de navegación del sistema, en lugar de quedar contenido dentro de su sección.
+
+### Investigación realizada
+
+El contenedor del logo usaba `aspect-square` (`aspect-ratio: 1/1`) como única fuente de altura, con dos hijos exclusivamente `absolute inset-0` (gradiente decorativo + `<img>`) — un patrón sin ningún contenido en flujo normal del que derivar tamaño intrínseco.
+
+Se intentó reproducir el bug con Playwright en múltiples configuraciones, todas sin éxito:
+- Chromium con viewport mobile emulado (390×844, 360×780)
+- WebKit real (motor Safari) con perfil `devices['iPhone 13']`
+- Chromium con perfil exacto `devices['Galaxy S24']` (360×780, `deviceScaleFactor: 3`, user-agent `SM-S921U`) — la combinación motor/dispositivo más cercana posible al hardware real de la usuaria, corriendo contra el sitio en producción (no contra `astro dev`)
+
+En todos los casos, la geometría computada (`getBoundingClientRect`, `getComputedStyle`) del contenedor y de la imagen coincidía exactamente con lo esperado, y las capturas se veían correctas. **El bug nunca se reprodujo en ningún emulador.**
+
+Se revisaron y descartaron por inspección de código (sin evidencia de que aplicaran):
+1. Elementos `position: fixed` escapando su contenedor — no existe ningún `fixed` en todo el proyecto
+2. `overflow: hidden` no aplicado en algún breakpoint — la clase no tenía prefijos responsive, se aplicaba siempre
+3. Unidades `vh`/`dvh`/`safe-area-inset` con comportamiento distinto en Chrome Android real — no se usa ninguna en el Hero (el único `100vh` del proyecto es `body { min-height }`, sin relación)
+
+### Decisión
+
+Se aplicaron dos cambios, uno detrás del otro:
+
+**1. Reemplazo de `aspect-square` por padding-percentage (commit `9d75692`)**
+Se identificó `aspect-ratio` sin contenido en flujo como un patrón CSS con fragilidad documentada en distintas versiones/builds de Chromium cuando coexiste con CSS Grid (`items-center`) y contenedores cuyos únicos hijos son absolutamente posicionados. Se reemplazó por la técnica clásica pre-`aspect-ratio`: un div hijo en flujo normal con `pt-[100%]`, que fija la altura cuadrada por matemática de box-model, sin depender del cálculo de aspect-ratio. Verificado con diff de píxeles = 0% en desktop/tablet/mobile (cambio de técnica interna, sin efecto visual).
+
+**2. Reordenar el logo primero en mobile/tablet (commit `4941ee8`)**
+Nueva pista de la usuaria: el elemento cortado era específicamente el último del documento en el layout apilado de una columna (`<lg`, es decir `<1024px`). Se agregó `order-first lg:order-none` al contenedor del logo — el logo pasa a renderizarse primero (arriba), texto/botones después, solo por debajo del breakpoint `lg` (1024px), que es donde el grid ya pasaba de 2 columnas a 1. No afecta el layout desktop (diff de píxeles = 0%).
+
+### Resultado
+
+La usuaria confirmó con una captura nueva de su dispositivo real que el logo se renderiza completo, sin cortes, arriba del texto — el síntoma reportado desapareció.
+
+### Honestidad epistémica — lo que NO sabemos
+
+**La causa raíz técnica exacta nunca fue confirmada.** No se logró reproducir el bug original en ningún emulador (Chromium, WebKit, con o sin perfil de dispositivo específico, contra dev server ni contra producción). La corrección de `aspect-square` → `pt-[100%]` es una hipótesis razonada (patrón CSS objetivamente frágil, con precedente documentado en la industria) pero nunca se pudo demostrar visualmente que resolviera algo — ninguna captura mostró diferencia antes/después en emulación. El reordenamiento (`order-first`) fue explícitamente una prueba diagnóstica además de mitigación.
+
+Es decir: **tenemos una mitigación verificada en el dispositivo real donde ocurría el bug, pero no un diagnóstico de causa raíz verificado en un entorno controlado/reproducible.** Es posible que el fix funcione por una razón distinta a la hipotetizada (por ejemplo, simplemente porque el elemento problemático ya no es el último en el documento, independientemente de si `aspect-square` tenía algo que ver), o que ambos cambios combinados hayan sido necesarios, o que un solo cambio hubiera bastado. No hay forma de aislar cuál de los dos commits resolvió el problema sin volver a exponer a la usuaria al bug.
+
+### Consecuencias
+- Si en el futuro aparece un bug de renderizado similar (elemento cortado/desbordado) específicamente en Chrome/Android real y no reproducible en emuladores, revisar primero: (a) contenedores cuya altura depende solo de `aspect-ratio` sin contenido en flujo, preferir `pt-[<n>%]`; (b) si el elemento problemático es el último del documento en el breakpoint afectado, probar reordenarlo
+- Los emuladores disponibles (Playwright Chromium/WebKit, incluso con perfiles de dispositivo específicos como `Galaxy S24`) **no son garantía de fidelidad 1:1 con hardware/browser build real** — no asumir que "no reproduce en emulador" significa "no es un bug real"
+- No revertir estos dos commits (`9d75692`, `4941ee8`) sin volver a validar en un dispositivo Android real

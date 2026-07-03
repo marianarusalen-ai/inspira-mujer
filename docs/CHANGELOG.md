@@ -6,6 +6,30 @@ Versionado semántico: [SemVer](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Corregido
+- Logo del Hero (`src/pages/index.astro`) cortado/desbordado en Chrome/Android
+  real (reportado en Samsung Galaxy S24), no reproducible en ningún emulador
+  probado (Chromium, WebKit, perfil `devices['Galaxy S24']`) — ver ADR-008
+  para el detalle de la investigación y la honestidad epistémica sobre la
+  causa raíz no confirmada:
+  - Contenedor del logo: `aspect-square` reemplazado por técnica
+    padding-percentage (`pt-[100%]`) — patrón CSS con fragilidad documentada
+    cuando coexiste con CSS Grid y contenedores solo-`absolute`
+  - Logo reordenado antes del texto/botones en mobile y tablet (`<1024px`,
+    breakpoint `lg`) via `order-first lg:order-none`
+  - **Verificado en dispositivo real** (Galaxy S24, Chrome) por la usuaria:
+    logo se renderiza completo, sin cortes
+
+### Agregado
+- Etapas 14-17 (datos reales de contacto/redes sociales, texto y logo real
+  del Hero, horario real del programa, "Quiénes somos" solo con Mariana y
+  foto real, link a la tienda online en el Footer) — pendiente changelog
+  detallado retroactivo
+
+---
+
 ## [1.0.0] — 2026-07-02
 
 Cierre del sitio institucional. Listo para producción (pendiente de conectar
